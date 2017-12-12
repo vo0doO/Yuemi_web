@@ -4,8 +4,7 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "test": "webpack-dev-server --inline --hot",
-    "start": "webpack-dev-server --inline --hot"
+    "start": "concurrently \"node server.js\" \"webpack-dev-server --inline --hot\""
   },
   "keywords": [],
   "author": "",
@@ -20,7 +19,7 @@
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
-    "axios": "^0.17.1",
+    "concurrently": "^3.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",

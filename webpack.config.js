@@ -11,6 +11,14 @@ module.exports = {
 		publicPath: "dist/",
 		filename: 'bundle.js'
 	},
+	devServer: {
+		proxy: {
+			'/api': {
+				target: 'http://localhost:8081',
+				secure: false
+			}
+		}
+	},
 	module: {
 		loaders: [{
 			test: /\.jsx?$/,
