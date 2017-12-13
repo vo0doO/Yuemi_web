@@ -1,6 +1,13 @@
-export const exampleAction = (data) => {
+export const updateSearchResults = (videos) => {
 	return {
-		type: "exampleAction",
-		data: data,
+		type: "UPDATE_SEARCH_RESULTS",
+		videos
+	}
+}
+
+export const setLoading = (bool) => {
+	return {
+		type: "SET_LOADING",
+		bool
 	}
 }
