@@ -13,8 +13,8 @@ module.exports = {
 	},
 	devServer: {
 		proxy: {
-			'/api': {
-				target: 'http://104.236.165.165/',
+			'/api/*': {
+				target: 'http://localhost:8081/',
 				secure: false
 			}
 		}
@@ -30,3 +30,5 @@ module.exports = {
 		}]
 	}
 };
+
+//target: 'http://104.236.165.165/',
