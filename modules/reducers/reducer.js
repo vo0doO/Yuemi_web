@@ -1,7 +1,9 @@
 const getInitialState = () => {
 	return {
 		searchResults: [],
-		loading: false
+		loading: false,
+		downloading: null,
+		progress: 0
 	}
 }
 
@@ -23,6 +25,16 @@ const reducer = (state=getInitialState(), action) => {
 		case "SET_LOADING":
 			newState = copyState(state);
 			newState.loading = action.bool;
+			return newState;
+
+		case "SET_DOWNLOADING":
+			newState = copyState(state);
+			newState.downloading = action.id;
+			return newState;
+
+		case "SET_PROGRESS":
+			newState = copyState(state);
+			newState.progress = action.progress;
 			return newState;
 
 		default:

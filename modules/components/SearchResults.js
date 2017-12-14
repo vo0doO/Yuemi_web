@@ -7,8 +7,9 @@ class SearchResults extends React.Component {
 	download(result) {
 		const socket = io('http://localhost:8081/');
 		socket.on('progress', (data) => {
-			console.log(data);
+			this.props.setProgress(parseInt(data));
 		})
+		this.props.setDownloading(result.id);
 		fetch('/api/request_file/' + result.id)
 			.then((res) => {
 				return res.text();
@@ -19,8 +20,26 @@ class SearchResults extends React.Component {
 					.then((res) => res.blob())
 					.then((blob) => {
 						fs.saveAs(blob, result.title + '.mp3');
+						this.props.setDownloading(null);
+						this.props.setProgress(0);
 					})
 			})
+	}
+
+	renderDownloadButton(result){
+		if(result.id == this.props.downloading) {
+			return (
+				<a
+					onClick={this.download.bind(this, result)}
+				>
+						{this.props.progress}
+				</a>
+			)
+		} else {
+			return (
+				<a onClick={this.download.bind(this, result)}>download</a>
+			)
+		}
 	}
 
 	renderResults() {
@@ -29,7 +48,7 @@ class SearchResults extends React.Component {
 			return (
 				<li key={result.id}>
 					<p>{result.title}</p>
-					<a onClick={this.download.bind(this, result)}>download</a>
+					{this.renderDownloadButton(result)}
 				</li>
 			)
 		})

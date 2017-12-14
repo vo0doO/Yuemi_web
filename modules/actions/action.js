@@ -11,3 +11,17 @@ export const setLoading = (bool) => {
 		bool
 	}
 }
+
+export const setDownloading = (id) => {
+	return {
+		type: "SET_DOWNLOADING",
+		id
+	}
+}
+
+export const setProgress = (progress) => {
+	return {
+		type: "SET_PROGRESS",
+		progress
+	}
+}
