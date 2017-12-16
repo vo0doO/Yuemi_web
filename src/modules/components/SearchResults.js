@@ -5,7 +5,8 @@ class SearchResults extends React.Component {
 
 	download(result) {
 		this.props.setDownloading(result.id);
-		const socket = io('http://localhost:8081/');
+		let url = process.env.NODE_ENV == 'production' ? '/' : 'http://localhost:8081';
+		const socket = io(url);
 		socket.emit('request_file', result.id);
 		socket.on('progress', (data) => {
 			this.props.setProgress(parseInt(data));
@@ -13,7 +14,7 @@ class SearchResults extends React.Component {
 		socket.on('request_complete', () => {
 			let id = encodeURIComponent(result.id);
 			let title = encodeURIComponent(result.title);
-			let url = `http://localhost:8080/api/download/${id}/${title}`;
+			let url = `/api/download/${id}/${title}`;
 			window.location.assign(url);
 			this.props.setDownloading(null);
 			this.props.setProgress(0);

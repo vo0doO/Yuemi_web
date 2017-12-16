@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ ! -f ./cache/$1.mp3 ]; then
+	echo 'FILE NOT FOUND.'
+	exit 1
+else
+	echo 'FILE FOUND.'
+	rm ./cache/$1.mp3
+	echo 'FILE DELETED.'
+fi
