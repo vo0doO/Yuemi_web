@@ -50,13 +50,28 @@ class SearchResults extends React.Component {
 		})
 	}
 
-	render() {
-		return (
-			<div className="searchResults">
-				{this.props.loading ? "loading..." : ""}
+	renderContent() {
+		if(this.props.loading) {
+			return (
+				<div className="spinner">
+					<div className="bounce1"></div>
+					<div className="bounce2"></div>
+					<div className="bounce3"></div>
+				</div>
+			)
+		} else {
+			return (
 				<ul>
 					{this.renderResults()}
 				</ul>
+			)
+		}
+	}
+
+	render() {
+		return (
+			<div className="searchResults">
+				{this.renderContent()}
 			</div>
 		)
 	}
