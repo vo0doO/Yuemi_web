@@ -25,3 +25,10 @@ export const setProgress = (progress) => {
 		progress
 	}
 }
+
+export const setTimer = (timer) => {
+	return {
+		type: "SET_TIMER",
+		timer
+	}
+}

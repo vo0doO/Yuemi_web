@@ -2,11 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 
 import Search from "../components/Search.js";
-import { updateSearchResults, setLoading } from "../actions/action.js";
+import { updateSearchResults, setLoading, setTimer } from "../actions/action.js";
 
 const mapStateToProps = (state) => {
 	return {
-		state: state
+		timer: state.timer
 	}
 }
 
@@ -17,6 +17,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		setLoading: (bool) => {
 			dispatch(setLoading(bool))
+		},
+		setTimer: (timer) => {
+			dispatch(setTimer(timer))
 		}
 	}
 }

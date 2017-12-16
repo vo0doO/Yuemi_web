@@ -3,12 +3,17 @@ import SearchBar from "./SearchBar.js";
 
 class Search extends React.Component {
 	
-	search(text){
+	handleInput(text) {
+		this.props.setLoading(true);
+		clearTimeout(this.props.timer);
+		this.props.setTimer(setTimeout(() => this.search(text), 1000));
+	}
+
+	search(text) {
 		if(text == '') {
 			return;
 		}
 		let url = '/api/search/' + text;
-		this.props.setLoading(true);
 		fetch(url)
 			.then(response => {
 				return response.json();
@@ -19,10 +24,10 @@ class Search extends React.Component {
 			})
 	}
 
-	render(){
+	render() {
 		return (
 			<div>
-				<SearchBar submit={this.search.bind(this)}/>
+				<SearchBar submit={this.handleInput.bind(this)}/>
 			</div>
 		)
 	}
