@@ -26,7 +26,7 @@ class SearchResults extends React.Component {
 				<a
 					onClick={this.download.bind(this, result)}
 				>
-						{this.props.progress}
+					<progress value={this.props.progress} max={100}></progress>
 				</a>
 			)
 		} else {
