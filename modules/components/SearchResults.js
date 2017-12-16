@@ -1,29 +1,23 @@
 import React from "react";
-import fs from "file-saver";
 import io from "socket.io-client";
 
 class SearchResults extends React.Component {
 
 	download(result) {
+		this.props.setDownloading(result.id);
 		const socket = io('http://localhost:8081/');
+		socket.emit('request_file', result.id);
 		socket.on('progress', (data) => {
 			this.props.setProgress(parseInt(data));
 		})
-		this.props.setDownloading(result.id);
-		fetch('/api/request_file/' + result.id)
-			.then((res) => {
-				return res.text();
-			})
-			.then((text) => {
-				console.log(text);
-				fetch('/api/download/' + result.id)
-					.then((res) => res.blob())
-					.then((blob) => {
-						fs.saveAs(blob, result.title + '.mp3');
-						this.props.setDownloading(null);
-						this.props.setProgress(0);
-					})
-			})
+		socket.on('request_complete', () => {
+			let id = encodeURIComponent(result.id);
+			let title = encodeURIComponent(result.title);
+			let url = `http://localhost:8080/api/download/${id}/${title}`;
+			window.location=(url);
+			this.props.setDownloading(null);
+			this.props.setProgress(0);
+		})
 	}
 
 	renderDownloadButton(result){
