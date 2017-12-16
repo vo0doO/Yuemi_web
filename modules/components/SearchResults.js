@@ -14,7 +14,7 @@ class SearchResults extends React.Component {
 			let id = encodeURIComponent(result.id);
 			let title = encodeURIComponent(result.title);
 			let url = `http://localhost:8080/api/download/${id}/${title}`;
-			window.location=(url);
+			window.location.assign(url);
 			this.props.setDownloading(null);
 			this.props.setProgress(0);
 		})
