@@ -31,7 +31,9 @@ class SearchResults extends React.Component {
 			)
 		} else {
 			return (
-				<a onClick={this.download.bind(this, result)}>download</a>
+				<a onClick={this.download.bind(this, result)}>
+					<i className="fa fa-download"></i>
+				</a>
 			)
 		}
 	}
@@ -50,7 +52,7 @@ class SearchResults extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="searchResults">
 				{this.props.loading ? "loading..." : ""}
 				<ul>
 					{this.renderResults()}

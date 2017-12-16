@@ -1,15 +1,13 @@
 import React from "react";
+import SearchBar from "./SearchBar.js";
 
 class Search extends React.Component {
-
-	componentDidMount(){
-		this.refs.searchText.focus()
-	}
 	
-	search(e){
-		e.preventDefault();
-		let searchText = this.refs.searchText.value;
-		let url = '/api/search/' + searchText;
+	search(text){
+		if(text == '') {
+			return;
+		}
+		let url = '/api/search/' + text;
 		this.props.setLoading(true);
 		fetch(url)
 			.then(response => {
@@ -23,10 +21,9 @@ class Search extends React.Component {
 
 	render(){
 		return (
-			<form className="searchForm" onSubmit={this.search.bind(this)}>
-				<input className="searchBar" type="text" ref="searchText"/>
-				<input className="submitButton" type="submit" value="Submit"/>
-			</form>
+			<div>
+				<SearchBar submit={this.search.bind(this)}/>
+			</div>
 		)
 	}
 }
