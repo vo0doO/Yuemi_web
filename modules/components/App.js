@@ -1,4 +1,5 @@
 import React from "react";
+import "../scss/app.scss"
 
 import SearchContainer from "../containers/SearchContainer.js";
 import SearchResultsContainer from "../containers/SearchResultsContainer.js";
