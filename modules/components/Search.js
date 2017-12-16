@@ -23,9 +23,9 @@ class Search extends React.Component {
 
 	render(){
 		return (
-			<form onSubmit={this.search.bind(this)}>
-				<input type="text" ref="searchText"/>
-				<input type="submit" value="Submit"/>
+			<form className="searchForm" onSubmit={this.search.bind(this)}>
+				<input className="searchBar" type="text" ref="searchText"/>
+				<input className="submitButton" type="submit" value="Submit"/>
 			</form>
 		)
 	}
