@@ -35,6 +35,12 @@ var downloadSchema = new Schema({
 });
 var Download = mongoose.model('Download', downloadSchema);
 
+app.use(function(req, res, next){
+	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	console.log('USER:', ip);
+	next();
+});
+
 app.use(bodyParser.json());
 
 app.use('/', express.static(__dirname + '/dist/'));
@@ -115,7 +121,7 @@ app.get('/api/search/:query', function(req, res){
 						});
 					}
 				} catch (e) {
-					console.log('UNABLE TO GET VIDEO:', i);
+					// not a video
 				}
             }
             console.log('SEARCH_SUCCESS: ' + req.params.query);
