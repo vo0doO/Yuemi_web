@@ -9,6 +9,10 @@ class SearchBar extends React.Component {
 		this.onInputChange = this.onInputChange.bind(this);
 	}
 
+	componentDidMount() {
+		this.refs.searchBar.focus();
+	}
+
 	onInputChange(e) {
 		const { value } = e.target;
 		this.setState({
@@ -22,8 +26,9 @@ class SearchBar extends React.Component {
 		return (
 			<div className='input-wrapper'>
 				<input
+					placeholder={'Search for music'}
+					ref={'searchBar'}
 					onChange={this.onInputChange}
-					placeholder='Search...'
 					value={inputValue}
 					spellCheck={false}
 				/>

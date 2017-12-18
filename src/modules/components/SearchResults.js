@@ -1,6 +1,8 @@
 import React from "react";
 import io from "socket.io-client";
 
+import CircularProgressbar from 'react-circular-progressbar';
+
 class SearchResults extends React.Component {
 
 	download(result) {
@@ -27,7 +29,7 @@ class SearchResults extends React.Component {
 				<a
 					onClick={this.download.bind(this, result)}
 				>
-					<progress value={this.props.progress} max={100}></progress>
+					<CircularProgressbar className={"test"} percentage={this.props.progress}/>
 				</a>
 			)
 		} else {
@@ -39,12 +41,42 @@ class SearchResults extends React.Component {
 		}
 	}
 
+	pixelate(c, src) {
+		if(!c) {
+			return; // check if memory usage is bad
+		}
+		var ctx = c.getContext('2d'),
+			img = new Image(); // check if memory usage is bad
+		ctx.mozImageSmoothingEnabled = false;
+		ctx.webkitImageSmoothingEnabled = false;
+		ctx.imageSmoothingEnabled = false;
+		img.onload = pixelate;
+		img.src = src;
+		function pixelate() {
+			var size = .08,
+				w = c.width * size,
+				h = c.height * size;
+			ctx.drawImage(img, 0, 0, w, h);
+			ctx.drawImage(c, 0, 0, w, h, 0, 0, c.width, c.height);
+		}
+		return c;
+	}
+
 	renderResults() {
 		let results = this.props.results;
 		return results.map((result) => {
+		let src = 'https://img.youtube.com/vi/' + result.id + '/mqdefault.jpg';
 			return (
 				<li key={result.id}>
-					<p>{result.title}</p>
+					<div className="result-left">
+						<div className="result-left-image">
+							<canvas ref={(c) => {this.pixelate(c, src)}} width="100" height="75"></canvas>
+						</div>
+						<div className="result-left-text">
+							<p>{result.title}</p>
+							<p>{result.duration}</p>
+						</div>
+					</div>
 					{this.renderDownloadButton(result)}
 				</li>
 			)
@@ -60,18 +92,23 @@ class SearchResults extends React.Component {
 					<div className="bounce3"></div>
 				</div>
 			)
-		} else {
+		} else if(this.props.results.length > 0) {
 			return (
 				<ul>
 					{this.renderResults()}
 				</ul>
+			)
+		} else {
+			return (
+				<div className="search-results-placeholder">
+				</div>
 			)
 		}
 	}
 
 	render() {
 		return (
-			<div className="searchResults">
+			<div className="search-results">
 				{this.renderContent()}
 			</div>
 		)

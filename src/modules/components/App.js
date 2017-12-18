@@ -8,7 +8,7 @@ class App extends React.Component {
 
 	render(){
 		return (
-			<div className="baseContainer">
+			<div className="base-container">
 				<SearchContainer/>
 				<SearchResultsContainer/>
 			</div>

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "concurrently \"webpack-dev-server --open --config webpack.dev.js\" \"node server.js\"",
     "build": "webpack --config webpack.prod.js",
-	"prod": "NODE_ENV=production node server.js"
+    "prod": "NODE_ENV=production node server.js"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +33,7 @@
     "mongoose": "^4.13.7",
     "node-sass": "^4.7.2",
     "react": "^16.2.0",
+    "react-circular-progressbar": "^0.6.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
