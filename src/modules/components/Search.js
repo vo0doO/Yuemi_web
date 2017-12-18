@@ -11,6 +11,7 @@ class Search extends React.Component {
 
 	search(text) {
 		if(text == '') {
+			this.props.setLoading(false);
 			return;
 		}
 		let url = '/api/search/' + text;
