@@ -1,8 +1,13 @@
 # Project
 dist/
 node_modules/
+
 cache/*
 !cache/.gitkeep
+
+logs/*
+!logs/.gitkeep
+
 *.DS_Store
 *.swp
 

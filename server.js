@@ -8,9 +8,17 @@ var socket = require('socket.io').listen(server);
 var request = require('request');
 var cheerio = require('cheerio');
 var execFile = require('child_process').execFile;
+var winston = require('winston');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        new (winston.transports.File)({filename: './logs/server.log'})
+    ]
+});
 
 mongoose.Promise = Promise;
 mongoose.connect('mongodb://localhost/yuemi', {
@@ -105,6 +113,7 @@ app.get('/api/search/:query', function(req, res){
             // inefficient, get div then search there instead of
             // whole document
             var $ = cheerio.load(body);
+			logger.info(body);
             var cl = $('.yt-lockup-title');
             for(i = 0; i < cl.length; i++){
 				try {
