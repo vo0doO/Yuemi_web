@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { setDownloading, setProgress } from "../actions/action.js";
+import { addDownload, removeDownload, setProgress } from "../actions/action.js";
 import SearchResults from "../components/SearchResults.js";
 
 const mapStateToProps = (state) => {
@@ -15,11 +15,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setDownloading: (id) => {
-			dispatch(setDownloading(id))
+		addDownload: (id) => {
+			dispatch(addDownload(id))
 		},
-		setProgress: (progress) => {
-			dispatch(setProgress(progress))
+		removeDownload: (id) => {
+			dispatch(removeDownload(id))
+		},
+		setProgress: (id, progress) => {
+			dispatch(setProgress(id, progress))
 		}
 	};
 }

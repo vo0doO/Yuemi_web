@@ -1,16 +1,19 @@
+import _ from "lodash";
+
 const getInitialState = () => {
 	return {
 		searchResults: [],
 		loading: false,
 		timer: null,
-		downloading: null,
-		progress: 0
+		downloading: {}, // id -> progress
 	}
 }
 
 const copyState = (state) => {
 	return (
-		Object.assign({}, state)
+		Object.assign({}, state, {
+			downloading: Object.assign({}, state.downloading)
+		})
 	)
 }
 
@@ -28,14 +31,19 @@ const reducer = (state=getInitialState(), action) => {
 			newState.loading = action.bool;
 			return newState;
 
-		case "SET_DOWNLOADING":
+		case "ADD_DOWNLOAD":
 			newState = copyState(state);
-			newState.downloading = action.id;
+			newState.downloading[action.id] = 0;
+			return newState;
+
+		case "REMOVE_DOWNLOAD":
+			newState = copyState(state);
+			newState.downloading = _.omit(newState.downloading, action.id);
 			return newState;
 
 		case "SET_PROGRESS":
 			newState = copyState(state);
-			newState.progress = action.progress;
+			newState.downloading[action.id] = action.progress;
 			return newState;
 
 		case "SET_TIMER":

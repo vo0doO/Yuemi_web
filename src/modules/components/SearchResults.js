@@ -1,35 +1,35 @@
 import React from "react";
 import io from "socket.io-client";
+import _ from "lodash";
 
 import CircularProgressbar from 'react-circular-progressbar';
 
 class SearchResults extends React.Component {
 
 	download(result) {
-		this.props.setDownloading(result.id);
+		this.props.addDownload(result.id);
 		let url = process.env.NODE_ENV == 'production' ? '/' : 'http://localhost:8081';
 		const socket = io(url);
 		socket.emit('request_file', result.id);
 		socket.on('progress', (data) => {
-			this.props.setProgress(parseInt(data));
+			this.props.setProgress(result.id, parseInt(data));
 		})
 		socket.on('request_complete', () => {
 			let id = encodeURIComponent(result.id);
 			let title = encodeURIComponent(result.title);
 			let url = `/api/download/${id}/${title}`;
 			window.location.assign(url);
-			this.props.setDownloading(null);
-			this.props.setProgress(0);
+			this.props.removeDownload(result.id);
 		})
 	}
 
 	renderDownloadButton(result){
-		if(result.id == this.props.downloading) {
+		if(_.hasIn(this.props.downloading, result.id)) {
 			return (
 				<a
 					onClick={this.download.bind(this, result)}
 				>
-					<CircularProgressbar className={"test"} percentage={this.props.progress}/>
+					<CircularProgressbar percentage={this.props.downloading[result.id]}/>
 				</a>
 			)
 		} else {

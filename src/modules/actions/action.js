@@ -12,16 +12,24 @@ export const setLoading = (bool) => {
 	}
 }
 
-export const setDownloading = (id) => {
+export const addDownload = (id) => {
 	return {
-		type: "SET_DOWNLOADING",
+		type: "ADD_DOWNLOAD",
 		id
 	}
 }
 
-export const setProgress = (progress) => {
+export const removeDownload = (id) => {
+	return {
+		type: "REMOVE_DOWNLOAD",
+		id
+	}
+}
+
+export const setProgress = (id, progress) => {
 	return {
 		type: "SET_PROGRESS",
+		id,
 		progress
 	}
 }
