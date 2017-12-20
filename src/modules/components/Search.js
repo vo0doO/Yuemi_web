@@ -14,7 +14,7 @@ class Search extends React.Component {
 			this.props.setLoading(false);
 			return;
 		}
-		let url = '/api/search/' + text;
+		let url = '/api/search/' + encodeURIComponent(text);
 		fetch(url)
 			.then(response => {
 				return response.json();
