@@ -63,6 +63,7 @@ body {
 				justify-content: left;
 				.result-left-image {
 					margin-right: 20px;
+					align-self: center;
 				}
 				canvas {
 					box-shadow: 1px 1px 3px black;
@@ -71,6 +72,16 @@ body {
 					display: flex;
 					flex-direction: column;
 					justify-content: center;
+					.uploader {
+						font-size: 12px;
+						margin-right: 7px;
+					}
+					.duration {
+						font-size: 14px;
+					}
+					.views {
+						font-size: 14px;
+					}
 					p {
 						margin: 6px 0;
 					}

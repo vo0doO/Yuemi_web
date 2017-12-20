@@ -74,7 +74,11 @@ class SearchResults extends React.Component {
 						</div>
 						<div className="result-left-text">
 							<p>{result.title}</p>
-							<p>{result.duration}</p>
+							<div>
+								<p className="uploader">{result.uploader}</p>
+								<p className="duration">{result.duration}</p>
+							</div>
+							<p className="views">{result.viewCount}</p>
 						</div>
 					</div>
 					{this.renderDownloadButton(result)}

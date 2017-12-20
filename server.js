@@ -16,7 +16,10 @@ var fs = require('fs');
 var logger = new (winston.Logger)({
     transports: [
         new (winston.transports.Console)(),
-        new (winston.transports.File)({filename: './logs/server.log'})
+		new (winston.transports.File)({
+			filename: './logs/server.log',
+			json: false
+		})
     ]
 });
 
@@ -110,29 +113,37 @@ app.get('/api/search/:query', function(req, res){
             console.log('SEARCH_ERROR: ' + err);
             res.status(response.statusCode >= 100 && response.statusCode < 600 ? response.statusCode : 500).send('SEARCH_ERROR: ' + err);
         } else {
-            // inefficient, get div then search there instead of
-            // whole document
             var $ = cheerio.load(body);
-			logger.info(body);
-            var cl = $('.yt-lockup-title');
-            for(i = 0; i < cl.length; i++){
+			var lockupTitle, lockupMeta,
+				attribs, duration, title, href, viewCount, uploader;
+			$('.yt-lockup-content').each(function(i, elem){
 				try {
-					var attribs = cl[i].children[0].attribs;
-					var title = attribs.title;
-					var href = attribs.href;
-					var duration = cl[i].children[1].children[0].data;
+					lockupTitle = $(this).find($('.yt-lockup-title'));
+					lockupMeta = $(this).find($('.yt-lockup-meta-info li'));
+					lockupByline = $(this).find($('.yt-lockup-byline'));
+					
+					attribs = lockupTitle.children()[0].attribs;
+					duration = lockupTitle.find($('span[class=accessible-description]')).html();
 					duration = duration.substr(0, duration.length-1);
+					title = attribs.title;
+					href = attribs.href;
+					uploader = lockupByline.find($('a')).html();
+
+					viewCount = lockupMeta.eq(1).text();
+
 					if(/\d/.test(duration)){
 						videos.push({
 							title,
+							viewCount,
+							uploader,
 							id: href.substr(9),
-							duration: duration.substr(13),
+							duration: duration.substr(13)
 						});
 					}
-				} catch (e) {
-					// not a video
+				} catch(e) {
+					// Not a video
 				}
-            }
+			})
             console.log('SEARCH_SUCCESS: ' + req.params.query);
             res.json({videos: videos});
         }
