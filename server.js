@@ -106,7 +106,12 @@ app.post('/api/user', function(req, res){
 })
 
 app.get('/api/search/:query', function(req, res){
-    var url = 'http://www.youtube.com/results?search_query=' + encodeURIComponent(req.params.query);
+	var idIndicator = '?v=';
+	var idIndex = req.params.query.indexOf(idIndicator);
+	if(idIndex != -1){
+		var newQuery = req.params.query.slice(idIndex + idIndicator.length);
+	}
+    var url = 'http://www.youtube.com/results?search_query=' + encodeURIComponent(newQuery || req.params.query);
     var videos = [];
     request(url, function (err, response, body) {
         if(err){
