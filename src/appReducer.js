@@ -17,9 +17,9 @@ const copyState = (state) => {
 	)
 }
 
-const reducer = (state=getInitialState(), action) => {
+const reducer = (state = getInitialState(), action) => {
 	let newState;
-	switch(action.type){
+	switch (action.type) {
 
 		case "UPDATE_SEARCH_RESULTS":
 			newState = copyState(state);

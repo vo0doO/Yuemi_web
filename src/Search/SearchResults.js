@@ -47,13 +47,13 @@ class SearchResults extends React.Component {
 		})
 	}
 
-	renderDownloadButton(result){
-		if(_.hasIn(this.props.downloading, result.id)) {
+	renderDownloadButton(result) {
+		if (_.hasIn(this.props.downloading, result.id)) {
 			return (
 				<a
 					onClick={this.download.bind(this, result)}
 				>
-					<CircularProgressbar percentage={this.props.downloading[result.id]}/>
+					<CircularProgressbar percentage={this.props.downloading[result.id]} />
 				</a>
 			)
 		} else {
@@ -66,7 +66,7 @@ class SearchResults extends React.Component {
 	}
 
 	pixelate(c, src) {
-		if(!c) {
+		if (!c) {
 			return; // check if memory usage is bad
 		}
 		var ctx = c.getContext('2d'),
@@ -89,12 +89,12 @@ class SearchResults extends React.Component {
 	renderResults() {
 		let results = this.props.results;
 		return results.map((result) => {
-		let src = 'https://img.youtube.com/vi/' + result.id + '/mqdefault.jpg';
+			let src = 'https://img.youtube.com/vi/' + result.id + '/mqdefault.jpg';
 			return (
 				<li key={result.id}>
 					<div className="result-left">
 						<div className="result-left-image">
-							<canvas ref={(c) => {this.pixelate(c, src)}} width="100" height="75"></canvas>
+							<canvas ref={(c) => { this.pixelate(c, src) }} width="100" height="75"></canvas>
 						</div>
 						<div className="result-left-text">
 							<p>{result.title}</p>
@@ -112,7 +112,7 @@ class SearchResults extends React.Component {
 	}
 
 	renderContent() {
-		if(this.props.loading) {
+		if (this.props.loading) {
 			return (
 				<div className="spinner">
 					<div className="bounce1"></div>
@@ -120,7 +120,7 @@ class SearchResults extends React.Component {
 					<div className="bounce3"></div>
 				</div>
 			)
-		} else if(this.props.results.length > 0) {
+		} else if (this.props.results.length > 0) {
 			return (
 				<ul>
 					{this.renderResults()}

@@ -1,6 +1,5 @@
 $input-font-size: 30px;
 $input-line-height: 70px;
-
 .input-wrapper {
   position: relative;
   width: 100%;
@@ -35,9 +34,8 @@ input {
   border: none;
   outline: none;
   border-bottom: 3px solid #333333;
-
   &:focus {
-    + .input-highlight {
+    +.input-highlight {
       border-top: 3px solid #ff6666;
     }
   }

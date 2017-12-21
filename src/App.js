@@ -13,11 +13,11 @@ const mapStateToProps = (state) => {
 
 class App extends React.Component {
 
-	render(){
+	render() {
 		return (
 			<div className="base-container">
-				<Search/>
-				<SearchResults/>
+				<Search />
+				<SearchResults />
 			</div>
 		)
 	}

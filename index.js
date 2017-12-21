@@ -12,7 +12,7 @@ const logger = createLogger();
 const useLogger = false;
 let store;
 
-if(useLogger == true){
+if (useLogger == true) {
 	store = createStore(
 		appReducer,
 		applyMiddleware(thunk, logger)
@@ -24,6 +24,6 @@ if(useLogger == true){
 const app = document.getElementById("app");
 ReactDOM.render(
 	<Provider store={store}>
-		<App/>
+		<App />
 	</Provider>
 	, app);

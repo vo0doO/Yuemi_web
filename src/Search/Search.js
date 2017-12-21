@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 class Search extends React.Component {
-	
+
 	handleInput(text) {
 		this.props.setLoading(true);
 		clearTimeout(this.props.timer);
@@ -32,7 +32,7 @@ class Search extends React.Component {
 	}
 
 	search(text) {
-		if(text == '') {
+		if (text == '') {
 			this.props.setLoading(false);
 			return;
 		}
@@ -50,7 +50,7 @@ class Search extends React.Component {
 	render() {
 		return (
 			<div>
-				<SearchBar submit={this.handleInput.bind(this)}/>
+				<SearchBar submit={this.handleInput.bind(this)} />
 			</div>
 		)
 	}
