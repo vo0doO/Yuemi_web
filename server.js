@@ -4,6 +4,7 @@ var production = process.env.NODE_ENV == 'production';
 var port = production ? 8080 : 8081;
 var server = app.listen(port)
 var socket = require('socket.io').listen(server);
+var path = require('path');
 
 var request = require('request');
 var cheerio = require('cheerio');
@@ -54,7 +55,7 @@ app.use(function(req, res, next){
 
 app.use(bodyParser.json());
 
-app.use('/', express.static(__dirname + '/dist/'));
+app.use('/', express.static(path.join(__dirname, 'dist')));
 
 app.post('/api/downloads', function(req, res){
     // add a download to db
@@ -158,13 +159,15 @@ app.get('/api/search/:query', function(req, res){
 socket.on('connection', function (client) {
 	client.on('request_file', function (id) {
 		console.log('INITIATED_FILE_REQUEST: ', id);
-		fs.exists(__dirname + '/cache/' + id + '.mp3', function (exists) {
+		var p = path.join(__dirname, 'cache', id + '.mp3');
+		fs.exists(p, function (exists) {
 			if (exists) {
 				client.emit('request_complete');
 				console.log('FILE_REQUEST_COMPLETE: ', id);
 			} else {
 				console.log("SOCKET DATA:", id);
-				var requestProcess = execFile(__dirname + '/lib/request_file', [id]);
+				var rp = path.join(__dirname, 'lib', 'request_file');
+				var requestProcess = execFile(rp, [id]);
 				requestProcess.stdout.on('data', function (data) {
 					if (data.indexOf("%") != -1) {
 						client.emit('progress', data.trim().split(/\s+/)[1]);
@@ -186,10 +189,11 @@ socket.on('connection', function (client) {
 app.get('/api/download/:id/:title', function(req, res){
     var re = /^[a-zA-Z0-9_-]+$/;
     if(re.test(req.params.id)){
-		fs.exists(__dirname + '/cache/' + req.params.id + '.mp3', (exists) => {
+		var p = path.join(__dirname, 'cache', req.params.id + '.mp3');
+		fs.exists(p, (exists) => {
 			if(exists) {
                 console.log('DL_SUCCESS: ' + req.params.id);
-                res.status(200).download(__dirname + '/cache/' + req.params.id + '.mp3', req.params.title + '.mp3');
+                res.status(200).download(p);
 			} else {
                 res.status(400).send('DL_ERROR: FILE_NOT_FOUND');
 			}
@@ -203,7 +207,8 @@ app.get('/api/download/:id/:title', function(req, res){
 app.get('/api/remove/:id', function(req, res){
     var re = /^[a-zA-Z0-9_-]+$/;
     if(re.test(req.params.id)){
-        var removeProcess = execFile(__dirname + '/lib/remove_file', [req.params.id]);
+		var p = path.join(__dirname, 'lib', 'remove_file');
+        var removeProcess = execFile(p, [req.params.id]);
 		removeProcess.on('close', function(exitCode){
 			if(exitCode == 1){
 				console.log('FILE_NOT_FOUND: ' + req.params.id);
