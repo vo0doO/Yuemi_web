@@ -3,26 +3,6 @@ import SearchBar from "./SearchBar.js";
 import { connect } from "react-redux";
 import { updateSearchResults, setLoading, setTimer } from "./SearchActions.js";
 
-const mapStateToProps = (state) => {
-	return {
-		timer: state.timer
-	}
-}
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		updateSearchResults: (videos) => {
-			dispatch(updateSearchResults(videos));
-		},
-		setLoading: (bool) => {
-			dispatch(setLoading(bool))
-		},
-		setTimer: (timer) => {
-			dispatch(setTimer(timer))
-		}
-	}
-}
-
 class Search extends React.Component {
 
 	handleInput(text) {
@@ -53,6 +33,26 @@ class Search extends React.Component {
 				<SearchBar submit={this.handleInput.bind(this)} />
 			</div>
 		)
+	}
+}
+
+const mapStateToProps = (state) => {
+	return {
+		timer: state.timer
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		updateSearchResults: (videos) => {
+			dispatch(updateSearchResults(videos));
+		},
+		setLoading: (bool) => {
+			dispatch(setLoading(bool))
+		},
+		setTimer: (timer) => {
+			dispatch(setTimer(timer))
+		}
 	}
 }
 

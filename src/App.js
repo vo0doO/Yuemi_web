@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import "./app.scss"
 import Search from "./Search/Search.js";
 import SearchResults from "./Search/SearchResults.js";
+import Downlaods from "./Downloads/Downloads.js";
 
 const mapStateToProps = (state) => {
 	return {
@@ -18,6 +19,7 @@ class App extends React.Component {
 			<div className="base-container">
 				<Search />
 				<SearchResults />
+				<Downlaods />
 			</div>
 		)
 	}

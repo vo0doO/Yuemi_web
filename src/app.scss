@@ -1,7 +1,8 @@
 @import './Search/search_bar';
 @import './Search/spinner';
-@import './Search/progress';
 @import './Search/search_results';
+@import './Downloads/progress';
+@import './Downloads/downloads';
 $font-family: Roboto Slab,
 sans-serif;
 $color_main: #ff6666;
@@ -18,36 +19,4 @@ body {
 	justify-content: center;
 	align-items: center; //width: 800px;
 	margin: auto;
-	ul {
-		box-shadow: 0px 0px 10px black;
-		padding: 0;
-		width: 100%;
-		border-bottom: 1px solid #383838;
-		background-color: #262626;
-		li {
-			box-shadow: 0px 0px 1px black;
-			list-style: none;
-			padding: 20px 50px;
-			text-align: left;
-			border-width: 1px 1px 0 1px;
-			border-style: solid;
-			border-color: #383838;
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			p {
-				display: inline;
-				color: white;
-			}
-			a {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				color: $color_main;
-				&:hover {
-					cursor: pointer;
-				}
-			}
-		}
-	}
 }
