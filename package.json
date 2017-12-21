@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "start": "concurrently \"webpack-dev-server --config webpack.dev.js\" \"node server.js\"",
+    "start": "concurrently \"webpack-dev-server --config webpack.dev.js\" \"nodemon server.js\"",
     "build": "webpack --config webpack.prod.js",
     "prod": "NODE_ENV=production node server.js"
   },
@@ -17,6 +17,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "nodemon": "^1.14.1",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.7",
     "webpack-merge": "^4.1.1"
