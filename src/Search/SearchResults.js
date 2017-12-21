@@ -1,8 +1,32 @@
 import React from "react";
 import io from "socket.io-client";
 import _ from "lodash";
-
 import CircularProgressbar from 'react-circular-progressbar';
+import { connect } from "react-redux";
+import { addDownload, removeDownload, setProgress } from "./SearchActions.js";
+
+const mapStateToProps = (state) => {
+	return {
+		results: state.searchResults,
+		loading: state.loading,
+		downloading: state.downloading,
+		progress: state.progress
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		addDownload: (id) => {
+			dispatch(addDownload(id))
+		},
+		removeDownload: (id) => {
+			dispatch(removeDownload(id))
+		},
+		setProgress: (id, progress) => {
+			dispatch(setProgress(id, progress))
+		}
+	};
+}
 
 class SearchResults extends React.Component {
 
@@ -119,4 +143,4 @@ class SearchResults extends React.Component {
 	}
 }
 
-export default SearchResults;
+export default connect(mapStateToProps, mapDispatchToProps)(SearchResults);

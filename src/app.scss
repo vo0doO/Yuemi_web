@@ -1,6 +1,6 @@
-@import 'search_bar';
-@import 'spinner';
-@import 'progress';
+@import './Search/search_bar';
+@import './Search/spinner';
+@import './Search/progress';
 
 $font-family: Roboto Slab, sans-serif;
 $color_main: #ff6666;

@@ -193,7 +193,7 @@ app.get('/api/download/:id/:title', function(req, res){
 		fs.exists(p, (exists) => {
 			if(exists) {
                 console.log('DL_SUCCESS: ' + req.params.id);
-                res.status(200).download(p);
+                res.status(200).download(p, req.params.title + '.mp3');
 			} else {
                 res.status(400).send('DL_ERROR: FILE_NOT_FOUND');
 			}

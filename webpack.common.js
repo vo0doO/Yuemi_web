@@ -4,13 +4,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: './src/index.js'
+    app: path.join(__dirname, 'index.js')
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       title: 'Yuemi',
-      template: __dirname + '/index.html',
+      template: path.join(__dirname, 'index.html'),
       inject: 'body',
       favicon: 'favicon.ico'
     })

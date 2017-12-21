@@ -4,8 +4,8 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 
-import AppContainer from "./modules/containers/AppContainer.js";
-import reducer from "./modules/reducers/reducer.js";
+import App from "./src/App.js";
+import appReducer from "./src/appReducer.js";
 import { createLogger } from "redux-logger";
 
 const logger = createLogger();
@@ -14,16 +14,16 @@ let store;
 
 if(useLogger == true){
 	store = createStore(
-		reducer,
+		appReducer,
 		applyMiddleware(thunk, logger)
 	);
 } else {
-	store = createStore(reducer);
+	store = createStore(appReducer);
 }
 
 const app = document.getElementById("app");
 ReactDOM.render(
 	<Provider store={store}>
-		<AppContainer/>
+		<App/>
 	</Provider>
 	, app);
