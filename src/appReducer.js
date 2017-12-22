@@ -7,6 +7,7 @@ const getInitialState = () => {
 		timer: null,
 		downloading: {}, // id -> {id, progress, title, uploader, views, duration, requested}
 		downloaded: {}, // same as downloading
+		feed: [],
 	}
 }
 
@@ -56,6 +57,11 @@ const reducer = (state = getInitialState(), action) => {
 		case "SET_TIMER":
 			newState = copyState(state);
 			newState.timer = action.timer;
+			return newState;
+
+		case "UPDATE_FEED":
+			newState = copyState(state);
+			newState.feed = action.feed;
 			return newState;
 
 		default:

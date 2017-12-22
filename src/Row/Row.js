@@ -1,6 +1,12 @@
 import React from "react";
+import { addDownload } from "../Downloads/DownloadActions.js";
+import { connect } from "react-redux";
 
-class SearchRow extends React.Component {
+class Row extends React.Component {
+
+    download(result) {
+        this.props.addDownload(result.id, result);
+    }
 
     pixelate(c, src) {
         if (!c) {
@@ -24,24 +30,24 @@ class SearchRow extends React.Component {
     }
 
     render() {
-        const result = this.props.result;
+        const result = this.props.data;
         let src = 'https://img.youtube.com/vi/' + result.id + '/mqdefault.jpg';
         return (
-            <li className="search-result">
-                <div className="result-left">
-                    <div className="result-left-image">
+            <li>
+                <div className="left">
+                    <div className="left-image">
                         <canvas ref={(c) => { this.pixelate(c, src) }} width="100" height="75"></canvas>
                     </div>
-                    <div className="result-left-text">
+                    <div className="left-text">
                         <p>{result.title}</p>
                         <div>
                             <p className="uploader">{result.uploader}</p>
                             <p className="duration">{result.duration}</p>
                         </div>
-                        <p className="views">{result.viewCount}</p>
+                        <p className="views">{result.views}</p>
                     </div>
                 </div>
-                <a onClick={() => this.props.download(result)}>
+                <a onClick={() => this.download(result)}>
                     <i className="fa fa-download"></i>
                 </a>
             </li>
@@ -49,4 +55,28 @@ class SearchRow extends React.Component {
     }
 }
 
-export default SearchRow;
+const mapStateToProps = (state) => {
+    return {
+        results: state.searchResults,
+        loading: state.loading,
+        downloading: state.downloading,
+        downloaded: state.downloaded,
+        progress: state.progress
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addDownload: (id, bundle) => {
+            dispatch(addDownload(id, bundle))
+        },
+        removeDownload: (id) => {
+            dispatch(removeDownload(id))
+        },
+        setProgress: (id, progress) => {
+            dispatch(setProgress(id, progress))
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Row);

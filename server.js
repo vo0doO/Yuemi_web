@@ -30,30 +30,29 @@ mongoose.connect('mongodb://localhost/yuemi', {
 });
 var Schema = mongoose.Schema;
 
-var userSchema = new Schema({
-	username: {
-		type: String,
-		required: true,
-		unique: true,
-	}
-}, {
-		timestamps: true
-	});
-var User = mongoose.model('User', userSchema);
-
 var downloadSchema = new Schema({
-	id: {
+	_id: {
 		type: String,
-		required: true,
-		unique: true
+		required: true
 	},
 	title: {
 		type: String,
 		required: true
 	},
-	duration: String,
-	users: {
-		type: [],
+	duration: {
+		type: String,
+		required: true
+	},
+	uploader: {
+		type: String,
+		required: true
+	},
+	views: {
+		type: String,
+		required: true
+	},
+	downloads: {
+		type: Number,
 		required: true
 	}
 }, {
@@ -73,17 +72,27 @@ app.use('/', express.static(path.join(__dirname, 'dist')));
 
 app.post('/api/downloads', function (req, res) {
 	// add a download to db
-	Download.findByIdAndUpdate(
-		req.body.id, {
-			_id: req.body.id,
-			$addToSet: {
-				'users': req.body.user
-			},
-			title: req.body.title,
-			duration: req.body.duration
-		}, {
-			safe: false,
-			upsert: true
+	var body = req.body,
+		id = body.id,
+		title = body.title,
+		duration = body.duration,
+		uploader = body.uploader,
+		views = body.views;
+	var query = { '_id': id };
+	var newData = { id, title, duration, uploader, views };
+	Download.findOneAndUpdate(
+		{_id: id },
+		{
+			_id: id,
+			title: title,
+			duration: duration,
+			views: views,
+			uploader: uploader,
+			$inc : {'downloads': 1}
+		},
+		{
+			upsert: true,
+			new: true
 		},
 		function (err) {
 			if (err) {
@@ -93,7 +102,8 @@ app.post('/api/downloads', function (req, res) {
 				console.log('FEED_POST_SUCCESS: ' + req.body.id);
 				res.sendStatus(200);
 			}
-		});
+		}
+	)
 });
 
 app.get('/api/downloads', function (req, res) {
@@ -140,7 +150,7 @@ app.get('/api/search/:query', function (req, res) {
 		} else {
 			var $ = cheerio.load(body);
 			var lockupTitle, lockupMeta,
-				attribs, duration, title, href, viewCount, uploader;
+				attribs, duration, title, href, views, uploader;
 			$('.yt-lockup-content').each(function (i, elem) {
 				try {
 					lockupTitle = $(this).find($('.yt-lockup-title'));
@@ -154,12 +164,12 @@ app.get('/api/search/:query', function (req, res) {
 					href = attribs.href;
 					uploader = lockupByline.find($('a')).html();
 
-					viewCount = lockupMeta.eq(1).text();
+					views = lockupMeta.eq(1).text();
 
 					if (/\d/.test(duration)) {
 						videos.push({
 							title,
-							viewCount,
+							views,
 							uploader,
 							id: href.substr(9),
 							duration: duration.substr(13)

@@ -13,6 +13,7 @@ class DownloadRow extends React.Component {
         if (!data.active) {
             socket.emit('request_file', data.id);
             this.props.setActive(data.id);
+            this.addDownloadToFeed(data);
         }
         // no error handling yet
         socket.on('progress', (progress_string) => {
@@ -25,6 +26,27 @@ class DownloadRow extends React.Component {
             window.location.assign(url);
             this.props.removeDownload(data.id);
         })
+    }
+
+    addDownloadToFeed(data) {
+        let { id, title, duration, uploader, views } = data;
+        fetch('/api/downloads', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id,
+                title,
+                duration,
+                uploader,
+                views
+            })
+        })
+            .then((res) => {
+                // error handling
+            });
     }
 
     render() {

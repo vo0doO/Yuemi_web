@@ -3,28 +3,6 @@ import { connect } from "react-redux";
 import { addDownload, removeDownload, setProgress } from "./DownloadActions.js";
 import DownloadRow from "./DownloadRow.js";
 
-const mapStateToProps = (state) => {
-    return {
-        results: state.searchResults,
-        loading: state.loading,
-        downloading: state.downloading
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addDownload: (id) => {
-            dispatch(addDownload(id))
-        },
-        removeDownload: (id) => {
-            dispatch(removeDownload(id))
-        },
-        setProgress: (id, progress) => {
-            dispatch(setProgress(id, progress))
-        }
-    };
-}
-
 class Downloads extends React.Component {
 
 
@@ -47,6 +25,28 @@ class Downloads extends React.Component {
             </div>
         )
     }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        results: state.searchResults,
+        loading: state.loading,
+        downloading: state.downloading
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addDownload: (id) => {
+            dispatch(addDownload(id))
+        },
+        removeDownload: (id) => {
+            dispatch(removeDownload(id))
+        },
+        setProgress: (id, progress) => {
+            dispatch(setProgress(id, progress))
+        }
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Downloads);

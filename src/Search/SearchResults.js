@@ -1,27 +1,23 @@
 import React from "react";
 import _ from "lodash";
 import { connect } from "react-redux";
-import { addDownload } from "../Downloads/DownloadActions.js";
-import SearchRow from "./SearchRow";
+import Row from "../Row/Row.js";
 
 class SearchResults extends React.Component {
-
-	download(result) {
-		this.props.addDownload(result.id, result);
-	}
 
 	renderResults() {
 		let results = this.props.results;
 		return results.map((result) => {
 			if (!_.hasIn(this.props.downloading, result.id) && !_.hasIn(this.props.downloaded, result.id)) {
 				return (
-					<SearchRow result={result} download={this.download.bind(this)} key={result.id} />
+					<Row data={result} key={result.id} />
 				)
 			}
 		})
-	}
+	} // MOVE DOWNLOAD TO ROW
 
 	renderContent() {
+		let dlen = Object.keys(this.props.downloading).length;
 		if (this.props.loading) {
 			return (
 				<div className="spinner">
@@ -32,15 +28,9 @@ class SearchResults extends React.Component {
 			)
 		} else if (this.props.results.length > 0) {
 			return (
-				<ul>
+				<ul style={{ "marginBottom": dlen * 50 }}>
 					{this.renderResults()}
 				</ul>
-			)
-		} else {
-			return (
-				<div className="search-results-placeholder">
-					<h1>Feed</h1>
-				</div>
 			)
 		}
 	}

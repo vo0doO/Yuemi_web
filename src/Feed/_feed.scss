@@ -1,5 +1,5 @@
 $color_main: #ff6666;
-.search-results {
+.feed {
     width: 700px;
     @media screen and (max-width: 700px) {
         width: 100%;
@@ -10,5 +10,8 @@ $color_main: #ff6666;
         width: 100%;
         border-bottom: 1px solid #383838;
         background-color: #262626;
+    }
+    h1 {
+        color: #757575;
     }
 }
