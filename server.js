@@ -81,14 +81,14 @@ app.post('/api/downloads', function (req, res) {
 	var query = { '_id': id };
 	var newData = { id, title, duration, uploader, views };
 	Download.findOneAndUpdate(
-		{_id: id },
+		{ _id: id },
 		{
 			_id: id,
 			title: title,
 			duration: duration,
 			views: views,
 			uploader: uploader,
-			$inc : {'downloads': 1}
+			$inc: { 'downloads': 1 }
 		},
 		{
 			upsert: true,
@@ -227,6 +227,24 @@ app.get('/api/download/:id/:title', function (req, res) {
 				res.status(200).download(p, req.params.title + '.mp3');
 			} else {
 				res.status(400).send('DL_ERROR: FILE_NOT_FOUND');
+			}
+		})
+	} else {
+		console.log('ILLEGAL_STRING: ' + req.params.id);
+		res.status(400).send('ILLEGAL_STRING: ' + req.params.id);
+	}
+});
+
+app.get('/api/getfile/:id', function (req, res) {
+	var re = /^[a-zA-Z0-9_-]+$/;
+	if (re.test(req.params.id)) {
+		var p = path.join(__dirname, 'cache', req.params.id + '.mp3');
+		fs.exists(p, function (exists) {
+			if (exists) {
+				console.log('DL_SUCCESS: ' + req.params.id);
+				res.status(200).sendFile(__dirname + '/cache/' + req.params.id + '.mp3');
+			} else {
+				res.status(400).send('DL_ERROR: ' + err);
 			}
 		})
 	} else {
