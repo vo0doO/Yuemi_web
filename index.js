@@ -1,27 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
-import App from "./src/App.js";
-import appReducer from "./src/appReducer.js";
-import { createLogger } from "redux-logger";
+import App from './src/App.js';
+import store from './src/store.js';
 
-const logger = createLogger();
-const useLogger = false;
-let store;
-
-if (useLogger == true) {
-	store = createStore(
-		appReducer,
-		applyMiddleware(thunk, logger)
-	);
-} else {
-	store = createStore(appReducer);
-}
-
-const app = document.getElementById("app");
+const app = document.getElementById('app');
 ReactDOM.render(
 	<Provider store={store}>
 		<App />

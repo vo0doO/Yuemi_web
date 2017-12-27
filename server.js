@@ -2,27 +2,16 @@ var express = require('express');
 var app = express();
 var production = process.env.NODE_ENV == 'production';
 var port = production ? 8080 : 8081;
-var server = app.listen(port)
+var server = app.listen(port);
 var socket = require('socket.io').listen(server);
 var path = require('path');
 
 var request = require('request');
 var cheerio = require('cheerio');
 var execFile = require('child_process').execFile;
-var winston = require('winston');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-
-var logger = new (winston.Logger)({
-	transports: [
-		new (winston.transports.Console)(),
-		new (winston.transports.File)({
-			filename: './logs/server.log',
-			json: false
-		})
-	]
-});
 
 mongoose.Promise = Promise;
 mongoose.connect('mongodb://localhost/yuemi', {
@@ -56,8 +45,8 @@ var downloadSchema = new Schema({
 		required: true
 	}
 }, {
-		timestamps: true
-	});
+	timestamps: true
+});
 var Download = mongoose.model('Download', downloadSchema);
 
 app.use(function (req, res, next) {
@@ -71,15 +60,12 @@ app.use(bodyParser.json());
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
 app.post('/api/downloads', function (req, res) {
-	// add a download to db
 	var body = req.body,
 		id = body.id,
 		title = body.title,
 		duration = body.duration,
 		uploader = body.uploader,
 		views = body.views;
-	var query = { '_id': id };
-	var newData = { id, title, duration, uploader, views };
 	Download.findOneAndUpdate(
 		{ _id: id },
 		{
@@ -103,7 +89,7 @@ app.post('/api/downloads', function (req, res) {
 				res.sendStatus(200);
 			}
 		}
-	)
+	);
 });
 
 app.get('/api/downloads', function (req, res) {
@@ -121,20 +107,6 @@ app.get('/api/downloads', function (req, res) {
 	}).limit(20);
 });
 
-app.post('/api/user', function (req, res) {
-	User({
-		username: req.body.username,
-	}).save(function (err) {
-		if (err) {
-			console.log('CREATE_USER_ERROR: ' + err);
-			res.status(500).send(err);
-		} else {
-			console.log('CREATE_USER_SUCCESS: ' + req.body.username);
-			res.sendStatus(200);
-		}
-	})
-})
-
 app.get('/api/search/:query', function (req, res) {
 	var idIndicator = '?v=';
 	var idIndex = req.params.query.indexOf(idIndicator);
@@ -149,9 +121,9 @@ app.get('/api/search/:query', function (req, res) {
 			res.status(response.statusCode >= 100 && response.statusCode < 600 ? response.statusCode : 500).send('SEARCH_ERROR: ' + err);
 		} else {
 			var $ = cheerio.load(body);
-			var lockupTitle, lockupMeta,
+			var lockupTitle, lockupMeta, lockupByline,
 				attribs, duration, title, href, views, uploader;
-			$('.yt-lockup-content').each(function (i, elem) {
+			$('.yt-lockup-content').each(function () {
 				try {
 					lockupTitle = $(this).find($('.yt-lockup-title'));
 					lockupMeta = $(this).find($('.yt-lockup-meta-info li'));
@@ -178,7 +150,7 @@ app.get('/api/search/:query', function (req, res) {
 				} catch (e) {
 					// Not a video
 				}
-			})
+			});
 			console.log('SEARCH_SUCCESS: ' + req.params.query);
 			res.json({
 				videos: videos
@@ -196,15 +168,15 @@ socket.on('connection', function (client) {
 				client.emit('request_complete');
 				console.log('FILE_REQUEST_COMPLETE: ', id);
 			} else {
-				console.log("SOCKET DATA:", id);
+				console.log('SOCKET DATA:', id);
 				var rp = path.join(__dirname, 'lib', 'request_file');
 				var requestProcess = execFile(rp, [id]);
 				requestProcess.stdout.on('data', function (data) {
-					if (data.indexOf("%") != -1) {
+					if (data.indexOf('%') != -1) {
 						client.emit('progress', data.trim().split(/\s+/)[1]);
 					}
 				});
-				requestProcess.on('close', function (success) {
+				requestProcess.on('close', function () {
 					console.log('FILE_REQUEST_COMPLETE: ', id);
 					client.emit('request_complete');
 				});
@@ -228,7 +200,7 @@ app.get('/api/download/:id/:title', function (req, res) {
 			} else {
 				res.status(400).send('DL_ERROR: FILE_NOT_FOUND');
 			}
-		})
+		});
 	} else {
 		console.log('ILLEGAL_STRING: ' + req.params.id);
 		res.status(400).send('ILLEGAL_STRING: ' + req.params.id);
@@ -244,9 +216,9 @@ app.get('/api/getfile/:id', function (req, res) {
 				console.log('DL_SUCCESS: ' + req.params.id);
 				res.status(200).sendFile(__dirname + '/cache/' + req.params.id + '.mp3');
 			} else {
-				res.status(400).send('DL_ERROR: ' + err);
+				res.status(400).send('DL_ERROR: FILE_DOES_NOT_EXIST');
 			}
-		})
+		});
 	} else {
 		console.log('ILLEGAL_STRING: ' + req.params.id);
 		res.status(400).send('ILLEGAL_STRING: ' + req.params.id);
@@ -266,17 +238,17 @@ app.get('/api/remove/:id', function (req, res) {
 				console.log('RM_SUCCESS: ' + req.params.id);
 				res.status(200).send('RM_SUCCESS: ' + req.params.id);
 			}
-		})
+		});
 		removeProcess.on('error', function (err) {
-			console.log('ILLEGAL_STRING: ' + error);
-			res.status(400).send('ILLEGAL_STRING: ' + error);
-		})
+			console.log('ILLEGAL_STRING: ' + err);
+			res.status(400).send('ILLEGAL_STRING: ' + err);
+		});
 	} else {
 		console.log('ILLEGAL_STRING: ' + req.params.id);
 		res.status(400).send('ILLEGAL_STRING: ' + req.params.id);
 	}
-})
+});
 
 app.get('*', function (req, res) {
-	res.status(404).send('Not Found')
+	res.status(404).send('Not Found');
 });

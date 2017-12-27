@@ -6,17 +6,29 @@
 	"scripts": {
 		"start": "concurrently \"webpack-dev-server --config webpack.dev.js\" \"nodemon server.js\"",
 		"build": "webpack --config webpack.prod.js",
-		"prod": "NODE_ENV=production node server.js"
+		"prod": "NODE_ENV=production node server.js",
+		"test": "jest"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
 		"babel-core": "^6.26.0",
+		"babel-jest": "^22.0.4",
 		"babel-loader": "^7.1.2",
 		"babel-preset-env": "^1.6.1",
 		"babel-preset-react": "^6.24.1",
 		"babel-preset-stage-0": "^6.24.1",
+		"enzyme": "^3.2.0",
+		"enzyme-adapter-react-16": "^1.1.1",
+		"eslint": "^4.14.0",
+		"eslint-config-airbnb": "^16.1.0",
+		"eslint-plugin-import": "^2.8.0",
+		"eslint-plugin-jsx-a11y": "^6.0.3",
+		"eslint-plugin-react": "^7.5.1",
+		"identity-obj-proxy": "^3.0.0",
+		"jest": "^22.0.4",
+		"jest-fetch-mock": "^1.4.0",
 		"nodemon": "^1.14.1",
 		"webpack": "^3.10.0",
 		"webpack-dev-server": "^2.9.7",
@@ -28,7 +40,7 @@
 		"clean-webpack-plugin": "^0.1.17",
 		"concurrently": "^3.5.1",
 		"css-loader": "^0.28.7",
-		"express": "^4.15.2",
+		"express": "^4.16.2",
 		"html-webpack-plugin": "^2.30.1",
 		"inline-source-map": "^0.6.2",
 		"lodash": "^4.17.4",
@@ -48,5 +60,22 @@
 		"style-loader": "^0.19.1",
 		"uglifyjs-webpack-plugin": "^1.1.4",
 		"winston": "^2.4.0"
+	},
+	"jest": {
+		"moduleDirectories": [
+			"node_modules",
+			"src"
+		],
+		"moduleNameMapper": {
+			"^.+\\.(scss)$": "identity-obj-proxy"
+		},
+		"setupTestFrameworkScriptFile": "<rootDir>/src/testSetup.js"
+	},
+	"babel": {
+		"presets": [
+			"env",
+			"react",
+			"stage-0"
+		]
 	}
 }

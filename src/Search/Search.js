@@ -29,7 +29,7 @@ class Search extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="search-container">
 				<SearchBar submit={this.handleInput.bind(this)} />
 			</div>
 		)
