@@ -51,4 +51,5 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
+export { Feed };
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);
