@@ -1,14 +1,14 @@
 $color_main: #ff6666;
 .search-results {
-    width: 700px;
-    @media screen and (max-width: 700px) {
-        width: 100%;
-    }
-    ul {
-        box-shadow: 0px 0px 10px black;
-        padding: 0;
-        width: 100%;
-        border-bottom: 1px solid #383838;
-        background-color: #262626;
-    }
+	width: 700px;
+		@media screen and (max-width: 700px) {
+			width: 100%;
+		}
+	ul {
+		box-shadow: 0px 0px 10px black;
+		padding: 0;
+		width: 100%;
+		border-bottom: 1px solid #383838;
+		background-color: #262626;
+	}
 }

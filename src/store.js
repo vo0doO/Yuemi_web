@@ -1,8 +1,8 @@
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
-import appReducer from "./appReducer.js";
-import { createLogger } from "redux-logger";
+import appReducer from './appReducer.js';
+import { createLogger } from 'redux-logger';
 
 const logger = createLogger();
 const useLogger = false;

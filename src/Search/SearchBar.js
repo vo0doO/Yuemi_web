@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 class SearchBar extends React.Component {
 
@@ -34,7 +34,7 @@ class SearchBar extends React.Component {
 					spellCheck={false}
 				/>
 				<span className='input-highlight'>
-					{inputValue.replace(/ /g, "\u00a0")}
+					{inputValue.replace(/ /g, '\u00a0')}
 				</span>
 			</div>
 		);

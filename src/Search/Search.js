@@ -1,7 +1,7 @@
-import React from "react";
-import SearchBar from "./SearchBar.js";
-import { connect } from "react-redux";
-import { updateSearchResults, setLoading, setTimer } from "./SearchActions.js";
+import React from 'react';
+import SearchBar from './SearchBar.js';
+import { connect } from 'react-redux';
+import { updateSearchResults, setLoading, setTimer } from './SearchActions.js';
 
 class Search extends React.Component {
 
@@ -24,23 +24,23 @@ class Search extends React.Component {
 			.then(json => {
 				this.props.setLoading(false);
 				this.props.updateSearchResults(json.videos);
-			})
+			});
 	}
 
 	render() {
 		return (
-			<div className="search-container">
+			<div className='search-container'>
 				<SearchBar submit={this.handleInput.bind(this)} />
 			</div>
-		)
+		);
 	}
 }
 
 const mapStateToProps = (state) => {
 	return {
 		timer: state.timer
-	}
-}
+	};
+};
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -48,12 +48,12 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(updateSearchResults(videos));
 		},
 		setLoading: (bool) => {
-			dispatch(setLoading(bool))
+			dispatch(setLoading(bool));
 		},
 		setTimer: (timer) => {
-			dispatch(setTimer(timer))
+			dispatch(setTimer(timer));
 		}
-	}
-}
+	};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

@@ -21,7 +21,6 @@ app.use(({headers, connection}, res, next) => {
 app.use(bodyParser.json());
 app.use('/', express.static(path.join(__dirname, '..', 'dist')));
 
-
 app.post('/api/downloads', controller.addDownloadToDatabase);
 app.get('/api/downloads', controller.getFeed);
 app.get('/api/search/:query', search);

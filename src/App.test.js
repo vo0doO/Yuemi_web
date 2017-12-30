@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // eslint-disable-line no-unused-vars
 import { mount } from 'enzyme';
 import App from './App.js';
 import Downloads from './Downloads/Downloads.js';
