@@ -2,10 +2,8 @@
 dist/
 node_modules/
 
-.vscode/
-
-cache/*
-!cache/.gitkeep
+server/cache/*
+!server/cache/.gitkeep
 
 logs/*
 !logs/.gitkeep

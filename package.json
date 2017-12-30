@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "./src/index.js",
 	"scripts": {
-		"start": "concurrently \"webpack-dev-server --config webpack.dev.js\" \"nodemon server.js\"",
+		"start": "concurrently --kill-others \"webpack-dev-server --config webpack.dev.js\" \"nodemon server/server.js\"",
 		"build": "webpack --config webpack.prod.js",
-		"prod": "NODE_ENV=production node server.js",
+		"prod": "NODE_ENV=production node server/server.js",
 		"test": "jest"
 	},
 	"keywords": [],
