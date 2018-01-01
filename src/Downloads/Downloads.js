@@ -49,4 +49,5 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
+export { Downloads }
 export default connect(mapStateToProps, mapDispatchToProps)(Downloads);
