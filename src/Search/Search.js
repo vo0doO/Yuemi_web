@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchBar from './SearchBar.js';
 import { connect } from 'react-redux';
-import { updateSearchResults, setLoading, setTimer } from './SearchActions.js';
+import { updateSearchResults, updateSearchText, setLoading, setTimer } from './SearchActions.js';
 
 class Search extends React.Component {
 
@@ -15,8 +15,11 @@ class Search extends React.Component {
 		if (text.trim() == '') {
 			this.props.setLoading(false);
 			this.props.updateSearchResults([]);
+			this.props.updateSearchText('');
 			return;
 		}
+		this.props.updateSearchText(text);
+		console.log(text);
 		let url = '/api/search/' + encodeURIComponent(text);
 		fetch(url)
 			.then(response => {
@@ -47,6 +50,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		updateSearchResults: (videos) => {
 			dispatch(updateSearchResults(videos));
+		},
+		updateSearchText: (text) => {
+			dispatch(updateSearchText(text));
 		},
 		setLoading: (bool) => {
 			dispatch(setLoading(bool));

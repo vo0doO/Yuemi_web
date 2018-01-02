@@ -5,6 +5,13 @@ export const updateSearchResults = (videos) => {
 	};
 };
 
+export const updateSearchText = (text) => {
+	return {
+		type: 'UPDATE_SEARCH_TEXT',
+		text
+	};
+};
+
 export const setLoading = (bool) => {
 	return {
 		type: 'SET_LOADING',

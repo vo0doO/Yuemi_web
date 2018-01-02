@@ -8,6 +8,7 @@ const getInitialState = () => {
 		downloading: {}, // id -> {id, progress, title, uploader, views, duration, requested}
 		downloaded: {}, // same as downloading
 		feed: [],
+		searchText: ''
 	};
 };
 
@@ -24,6 +25,11 @@ const reducer = (state = getInitialState(), action) => {
 	case 'UPDATE_SEARCH_RESULTS':
 		newState = copyState(state);
 		newState.searchResults = action.videos;
+		return newState;
+
+	case 'UPDATE_SEARCH_TEXT':
+		newState = copyState(state);
+		newState.searchText = action.text;
 		return newState;
 
 	case 'SET_LOADING':
