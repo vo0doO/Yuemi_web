@@ -2,13 +2,13 @@ import React from 'react';
 import { addDownload } from '../Downloads/DownloadActions.js';
 import { connect } from 'react-redux';
 
-class Row extends React.Component {
+class VideoListRow extends React.Component {
 
-	download(result) {
-		this.props.addDownload(result.id, result);
+	download(video) {
+		this.props.addDownload(video._id, video);
 	}
 
-	pixelate(c, src) {
+	pixelate(c, src) { // thumbnail pixelation is an unpopular feature, consider removing
 		if (!c) {
 			return; // check if memory usage is bad
 		}
@@ -29,27 +29,33 @@ class Row extends React.Component {
 		return c;
 	}
 
+	hasBeenDownloaded(id) {
+		return Object.keys(this.props.downloaded).indexOf(id) != -1 || Object.keys(this.props.downloading).indexOf(id) != -1;
+	}
+
 	render() {
-		const result = this.props.data;
-		let src = 'https://img.youtube.com/vi/' + result.id + '/mqdefault.jpg';
+		const video = this.props.video;
+		let src = 'https://img.youtube.com/vi/' + video._id + '/mqdefault.jpg';
 		return (
-			<li>
+			<li className={this.hasBeenDownloaded(video._id) ? 'downloaded' : 'not-downloaded'}>
 				<div className='left'>
 					<div className='left-image'>
 						<canvas ref={(c) => { this.pixelate(c, src); }} width='100' height='75'></canvas>
 					</div>
 					<div className='left-text'>
-						<p>{result.title}</p>
+						<p>{video.title}</p>
 						<div>
-							<p className='uploader'>{result.uploader}</p>
-							<p className='duration'>{result.duration}</p>
+							<p className='uploader'>{video.uploader}</p>
+							<p className='duration'>{video.duration}</p>
 						</div>
-						<p className='views'>{result.views}</p>
+						<p className='views'>{video.views}</p>
 					</div>
 				</div>
-				<a onClick={() => this.download(result)}>
-					<i className='fa fa-download'></i>
-				</a>
+				{!this.hasBeenDownloaded(video._id) && (
+					<a onClick={() => this.download(video)}>
+						<i className='fa fa-download'></i>
+					</a>
+				)}
 			</li>
 		);
 	}
@@ -57,11 +63,8 @@ class Row extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		results: state.searchResults,
-		loading: state.loading,
-		downloading: state.downloading,
 		downloaded: state.downloaded,
-		progress: state.progress
+		downloading: state.downloading
 	};
 };
 
@@ -73,4 +76,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Row);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoListRow);

@@ -1,29 +1,29 @@
-export const addDownload = (id, bundle) => {
+export const addDownload = (_id, bundle) => {
 	return {
 		type: 'ADD_DOWNLOAD',
-		id,
+		_id,
 		bundle
 	};
 };
 
-export const removeDownload = (id) => {
+export const removeDownload = (_id) => {
 	return {
 		type: 'REMOVE_DOWNLOAD',
-		id
+		_id
 	};
 };
 
-export const setProgress = (id, progress) => {
+export const setProgress = (_id, progress) => {
 	return {
 		type: 'SET_PROGRESS',
-		id,
+		_id,
 		progress
 	};
 };
 
-export const setActive = (id) => {
+export const setActive = (_id) => {
 	return {
 		type: 'SET_ACTIVE',
-		id
+		_id
 	};
 };

@@ -44,7 +44,7 @@ module.exports = ({params}, res) => {
 							title,
 							views,
 							uploader,
-							id: href.substr(9),
+							_id: href.substr(9),
 							duration: duration.substr(13)
 						});
 					}

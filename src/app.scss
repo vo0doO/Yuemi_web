@@ -1,10 +1,9 @@
 @import './Search/search_bar';
 @import './Search/spinner';
-@import './Search/search_results';
 @import './Downloads/progress';
 @import './Downloads/downloads';
-@import './Row/row';
-@import './Feed/feed';
+@import './VideoList/video_list';
+@import './VideoList/video_list_row';
 $font-family: Roboto Slab,
 sans-serif;
 $color_main: #ff6666;

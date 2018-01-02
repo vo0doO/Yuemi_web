@@ -33,25 +33,25 @@ const reducer = (state = getInitialState(), action) => {
 
 	case 'ADD_DOWNLOAD':
 		newState = copyState(state);
-		newState.downloading[action.id] = action.bundle;
-		newState.downloading[action.id].active = false;
-		newState.downloading[action.id].progress = 0;
+		newState.downloading[action._id] = action.bundle;
+		newState.downloading[action._id].active = false;
+		newState.downloading[action._id].progress = 0;
 		return newState;
 
 	case 'REMOVE_DOWNLOAD': // ALSO ADDS TO DOWNLOADED. SHOULD BE TWO ACTIONS?
 		newState = copyState(state);
-		newState.downloaded[action.id] = newState.downloading[action.id];
-		newState.downloading = _.omit(newState.downloading, action.id);
+		newState.downloaded[action._id] = newState.downloading[action._id];
+		newState.downloading = _.omit(newState.downloading, action._id);
 		return newState;
 
 	case 'SET_PROGRESS':
 		newState = copyState(state);
-		newState.downloading[action.id].progress = action.progress;
+		newState.downloading[action._id].progress = action.progress;
 		return newState;
 
 	case 'SET_ACTIVE':
 		newState = copyState(state);
-		newState.downloading[action.id].active = true;
+		newState.downloading[action._id].active = true;
 		return newState;
 
 	case 'SET_TIMER':

@@ -11,25 +11,26 @@ class DownloadRow extends React.Component {
 		let url = process.env.NODE_ENV == 'production' ? '/' : 'http://localhost:8081';
 		const socket = io(url);
 		if (!data.active) {
-			socket.emit('request_file', data.id);
-			this.props.setActive(data.id);
+			socket.emit('request_file', data._id);
+			this.props.setActive(data._id);
 			this.addDownloadToFeed(data);
 		}
 		// no error handling yet
 		socket.on('progress', (progress_string) => {
-			this.props.setProgress(data.id, parseInt(progress_string));
+			this.props.setProgress(data._id, parseInt(progress_string));
 		});
 		socket.on('request_complete', () => {
-			let id = encodeURIComponent(data.id);
+			let id = encodeURIComponent(data._id);
 			let title = encodeURIComponent(data.title);
 			let url = `/api/getFile/WEB/${id}/${title}`;
 			window.location.assign(url);
-			this.props.removeDownload(data.id);
+			this.props.removeDownload(data._id);
+			socket.close();
 		});
 	}
 
 	addDownloadToFeed(data) {
-		let { id, title, duration, uploader, views } = data;
+		let { _id, title, duration, uploader, views } = data;
 		fetch('/api/downloads', {
 			method: 'POST',
 			headers: {
@@ -37,7 +38,7 @@ class DownloadRow extends React.Component {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				id,
+				_id,
 				title,
 				duration,
 				uploader,

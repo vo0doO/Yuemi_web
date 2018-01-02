@@ -5,15 +5,15 @@ mongoose.connect('mongodb://localhost/yuemi', { useMongoClient: true });
 
 exports.addDownloadToDatabase = (req, res) => {
 	const body = req.body;
-	const id = body.id;
+	const _id = body._id;
 	const title = body.title;
 	const duration = body.duration;
 	const uploader = body.uploader;
 	const views = body.views;
 	Download.findOneAndUpdate(
-		{ _id: id },
+		{ _id },
 		{
-			_id: id,
+			_id,
 			title,
 			duration,
 			views,
@@ -29,7 +29,7 @@ exports.addDownloadToDatabase = (req, res) => {
 				console.log(`FEED_POST_ERROR: ${err}`);
 				res.status(500).send(err);
 			} else {
-				console.log(`FEED_POST_SUCCESS: ${req.body.id}`);
+				console.log(`FEED_POST_SUCCESS: ${req.body._id}`);
 				res.sendStatus(200);
 			}
 		}
