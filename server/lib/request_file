@@ -18,6 +18,6 @@ CUR_DIR=${PWD##*/}
 # However these two problems are most likely mutually exclusive. If Yuemi becomes popular I can just use find.
 if [ $CUR_DIR == "cache" ]; then
 	rm $(ls -tc *.mp3 | tail -n +30)
-	youtube-dl --newline -x --audio-format mp3 -o "$1.%(ext)s" -- $1
+	youtube-dl --newline -x --audio-format mp3 --embed-thumbnail -o "$1.%(ext)s" -- $1
 fi
 
