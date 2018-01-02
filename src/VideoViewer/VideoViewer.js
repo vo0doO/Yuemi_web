@@ -1,0 +1,66 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { setVideoViewer } from './VideoViewerActions.js';
+import { addDownload } from '../Downloads/DownloadActions.js';
+
+class VideoViewer extends React.Component {
+
+	getClasses(classList) { // a little verbose
+		if(this.props.showing) {
+			classList.push('showing');
+		}
+		return classList.join(' ');
+	}
+
+	close() {
+		this.props.setVideoViewer(false, {});
+	}
+
+	download() {
+		this.props.addDownload(this.props.video._id, this.props.video);
+	}
+
+	render() {
+		let src = 'https://img.youtube.com/vi/' + this.props.video._id + '/hqdefault.jpg';
+		return (
+			<div className={this.getClasses(['video-viewer'])}>
+				<div className={this.getClasses(['video-viewer-content'])}>
+					<div className='video-viewer-content-top' style={{'backgroundImage': `url(${src})`}}>
+						<div className='video-viewer-text-container'>
+							<h1 className='video-viewer-text'>{this.props.video.title}</h1>
+							<h3 className='video-viewer-text'>{this.props.video.uploader}</h3>
+							<h3 className='video-viewer-text'>{this.props.video.views}</h3>
+							<h3 className='video-viewer-text'>{this.props.video.duration}</h3>
+							<a onClick={this.download.bind(this)}>
+								<i className='download-button-mp3 fa fa-download'></i>
+							</a>
+						</div>
+					</div>
+					<div className='close-viewer' onClick={this.close.bind(this)}>
+						<i className="fa fa-times"></i>
+					</div>
+				</div>
+			</div>
+		);
+	}
+}
+
+const mapStateToProps = (state) => {
+	return {
+		showing: state.videoViewerShowing,
+		video: state.videoViewerContent
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setVideoViewer: (bool, video) => {
+			dispatch(setVideoViewer(bool, video));
+		},
+		addDownload: (id, video) => {
+			dispatch(addDownload(id, video));
+		}
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(VideoViewer);

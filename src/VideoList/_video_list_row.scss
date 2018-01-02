@@ -23,18 +23,23 @@ li {
 	p {
 		display: inline;
 		color: white;
+		&:hover {
+			cursor: pointer;
+		}
 	}
 	a {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		color: $color_main;
+		width: 10%;
 		&:hover {
 			cursor: pointer;
 		}
 	}
 	.left {
 		display: flex;
+		width: 90%;
 		flex-direction: row;
 		justify-content: left;
 		.left-image {
@@ -61,12 +66,6 @@ li {
 			p {
 				margin: 6px 0;
 			}
-		}
-	}
-	a {
-		i {
-			font-size: 27px !important;
-			margin-left: 20px;
 		}
 	}
 }

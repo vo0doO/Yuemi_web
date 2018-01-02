@@ -4,6 +4,7 @@
 @import './Downloads/downloads';
 @import './VideoList/video_list';
 @import './VideoList/video_list_row';
+@import './VideoViewer/video_viewer';
 $font-family: Roboto Slab,
 sans-serif;
 $color_main: #ff6666;
@@ -22,6 +23,19 @@ body {
 	margin: auto;
 }
 
+.feed-container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
 .header-text-grey {
 	color: #757575;
+}
+
+i.fa {
+	font-size: 27px !important;
+	margin-left: 20px;
 }

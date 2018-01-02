@@ -8,7 +8,9 @@ const getInitialState = () => {
 		downloading: {}, // id -> {id, progress, title, uploader, views, duration, requested}
 		downloaded: {}, // same as downloading
 		feed: [],
-		searchText: ''
+		searchText: '',
+		videoViewerShowing: false,
+		videoViewerContent: {}
 	};
 };
 
@@ -68,6 +70,12 @@ const reducer = (state = getInitialState(), action) => {
 	case 'UPDATE_FEED':
 		newState = copyState(state);
 		newState.feed = action.feed;
+		return newState;
+
+	case 'SET_VIDEO_VIEWER':
+		newState = copyState(state);
+		newState.videoViewerShowing = action.bool;
+		newState.videoViewerContent = action.video;
 		return newState;
 
 	default:

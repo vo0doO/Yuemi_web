@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import './app.scss';
 import Search from './Search/Search.js';
 import VideoList from './VideoList/VideoList.js';
+import VideoViewer from './VideoViewer/VideoViewer.js';
 import Downloads from './Downloads/Downloads.js';
 import { updateFeed } from './AppActions.js';
 
@@ -30,7 +31,7 @@ class App extends React.Component {
 			return <VideoList videoList={this.props.searchResults} />;
 		} else {
 			return (
-				<div>
+				<div className='feed-container'>
 					<h1 className='header-text-grey'>Recently Downloaded</h1>
 					<VideoList videoList={this.props.feed} />;
 				</div>
@@ -44,6 +45,7 @@ class App extends React.Component {
 				<Search />
 				{this.getVideoList()}
 				<Downloads />
+				<VideoViewer />
 			</div>
 		);
 	}

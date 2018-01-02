@@ -1,5 +1,6 @@
 import React from 'react';
 import { addDownload } from '../Downloads/DownloadActions.js';
+import { setVideoViewer } from '../VideoViewer/VideoViewerActions.js';
 import { connect } from 'react-redux';
 
 class VideoListRow extends React.Component {
@@ -29,6 +30,10 @@ class VideoListRow extends React.Component {
 		return c;
 	}
 
+	showVideoViewer() {
+		this.props.setVideoViewer(true, this.props.video);
+	}
+
 	hasBeenDownloaded(id) {
 		return Object.keys(this.props.downloaded).indexOf(id) != -1 || Object.keys(this.props.downloading).indexOf(id) != -1;
 	}
@@ -43,11 +48,9 @@ class VideoListRow extends React.Component {
 						<canvas ref={(c) => { this.pixelate(c, src); }} width='100' height='75'></canvas>
 					</div>
 					<div className='left-text'>
-						<p>{video.title}</p>
-						<div>
-							<p className='uploader'>{video.uploader}</p>
-							<p className='duration'>{video.duration}</p>
-						</div>
+						<p onClick={this.showVideoViewer.bind(this)}>{video.title}</p>
+						<p className='uploader'>{video.uploader}</p>
+						<p className='duration'>{video.duration}</p>
 						<p className='views'>{video.views}</p>
 					</div>
 				</div>
@@ -72,6 +75,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		addDownload: (id, bundle) => {
 			dispatch(addDownload(id, bundle));
+		},
+		setVideoViewer: (bool, video) => {
+			dispatch(setVideoViewer(bool, video));
 		}
 	};
 };
