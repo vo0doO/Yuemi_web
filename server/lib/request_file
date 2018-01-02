@@ -8,6 +8,7 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
+mkdir -p $DIR/../cache
+
 cd $DIR/../cache
 youtube-dl --newline -x --audio-format mp3 -o "$1.%(ext)s" -- $1
-cd ..
