@@ -6,6 +6,7 @@ Yuemi's React web application.
 - youtube-dl
 - mongodb
 - ffmpeg
+- avconv (libav)
 - python
 
 ## Development
