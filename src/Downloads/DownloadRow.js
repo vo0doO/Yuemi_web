@@ -10,6 +10,7 @@ class DownloadRow extends React.Component {
 		const data = this.props.data;
 		let url = process.env.NODE_ENV == 'production' ? '/' : 'http://localhost:8081';
 		const socket = io(url);
+		this.socket = socket;
 		if (!data.active) {
 			socket.emit('request_file', data._id);
 			this.props.setActive(data._id);
@@ -32,6 +33,11 @@ class DownloadRow extends React.Component {
 			this.props.removeDownload(data._id);
 			socket.close();
 		});
+	}
+
+	cancelDownload() {
+		this.props.removeDownload(this.props.data._id);
+		this.socket.close();
 	}
 
 	addDownloadToFeed(data) {
@@ -64,9 +70,14 @@ class DownloadRow extends React.Component {
 				<p>
 					{this.props.data.title}
 				</p>
-				<a>
-					<CircularProgressbar percentage={this.props.data.progress} />
-				</a>
+				<div>
+					<a onClick={this.cancelDownload.bind(this)}>
+						<i className='fa fa-times-circle-o'></i>
+					</a>
+					<a>
+						<CircularProgressbar percentage={this.props.data.progress} />
+					</a>
+				</div>
 			</li>
 		);
 	}

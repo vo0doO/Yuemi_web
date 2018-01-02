@@ -32,14 +32,24 @@ $color_main: #ff6666;
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
-			a {
+			div {
 				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				color: $color_main;
-				margin-left: 20px;
-				&:hover {
-					cursor: pointer;
+				flex-direction: row;
+				justify-content: space-around;
+				a {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					color: $color_main;
+					margin-left: 20px;
+					&:hover {
+						cursor: default;
+					}
+					i {
+						&:hover {
+							cursor: pointer;
+						}
+					}
 				}
 			}
 		}
