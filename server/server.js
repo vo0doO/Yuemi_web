@@ -24,7 +24,6 @@ app.use('/', express.static(path.join(__dirname, '..', 'dist')));
 app.post('/api/downloads', controller.addDownloadToDatabase);
 app.get('/api/downloads', controller.getFeed);
 app.get('/api/search/:query', search);
-app.get('/api/remove/:id', file_interaction.remove);
 app.get('/api/getFile/:platform/:id/:title', file_interaction.getFile); //:platform feels odd
 file_interaction.awaitFileRequest(socket);
 app.get('*', (req, res) => res.sendStatus(404));

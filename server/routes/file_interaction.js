@@ -55,27 +55,3 @@ exports.getFile = ({params}, res) => {
 		res.status(400).send(`ILLEGAL_STRING: ${params.id}`);
 	}
 };
-
-exports.remove = ({params}, res) => {
-	const re = /^[a-zA-Z0-9_-]+$/;
-	if (re.test(params.id)) {
-		const p = path.join(__dirname, '..', 'lib', 'remove_file');
-		const removeProcess = execFile(p, [params.id]);
-		removeProcess.on('close', exitCode => {
-			if (exitCode == 1) {
-				console.log(`FILE_NOT_FOUND: ${params.id}`);
-				res.status(400).send(`FINE_NOT_FOUND: ${params.id}`);
-			} else {
-				console.log(`RM_SUCCESS: ${params.id}`);
-				res.status(200).send(`RM_SUCCESS: ${params.id}`);
-			}
-		});
-		removeProcess.on('error', err => {
-			console.log(`ILLEGAL_STRING: ${err}`);
-			res.status(400).send(`ILLEGAL_STRING: ${err}`);
-		});
-	} else {
-		console.log(`ILLEGAL_STRING: ${params.id}`);
-		res.status(400).send(`ILLEGAL_STRING: ${params.id}`);
-	}
-};
