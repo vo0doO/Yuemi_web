@@ -12,7 +12,7 @@ class Search extends React.Component {
 	}
 
 	search(text) {
-		if (text == '') {
+		if (text.trim() == '') {
 			this.props.setLoading(false);
 			this.props.updateSearchResults([]);
 			return;
