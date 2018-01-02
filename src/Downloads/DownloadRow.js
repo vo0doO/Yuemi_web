@@ -27,6 +27,11 @@ class DownloadRow extends React.Component {
 			this.props.removeDownload(data._id);
 			socket.close();
 		});
+		socket.on('error', (error) => {
+			console.log(error);
+			this.props.removeDownload(data._id);
+			socket.close();
+		});
 	}
 
 	addDownloadToFeed(data) {
