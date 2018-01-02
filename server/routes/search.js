@@ -35,7 +35,7 @@ module.exports = ({params}, res) => {
 					duration = duration.substr(0, duration.length - 1);
 					title = attribs.title;
 					href = attribs.href;
-					uploader = lockupByline.find($('a')).html();
+					uploader = lockupByline.find($('a')).text();
 
 					views = lockupMeta.eq(1).text();
 
