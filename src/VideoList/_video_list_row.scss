@@ -23,6 +23,9 @@ li {
 	p {
 		display: inline;
 		color: white;
+		&:hover {
+			cursor: pointer;
+		}
 	}
 	a {
 		display: flex;

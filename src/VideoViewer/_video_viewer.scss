@@ -1,0 +1,64 @@
+.video-viewer.showing {
+	visibility: visible;
+}
+
+.video-viewer {
+	visibility: hidden;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.2);
+	top: 0;
+	bottom: 0;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-viewer-content {
+	width: 50%;
+	height: 50%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #d0d0d0;
+	box-shadow: 0 0 20px black;
+	i {
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	transition: opacity 200ms ease-in-out, transform 250ms cubic-bezier(.54,-0.38,.39,1);
+	opacity: 0.01;
+	transform: translateY(-10%);
+}
+
+.video-viewer-content.showing {
+	opacity: 1;
+	transform: translateY(0%);
+}
+
+.bounce-enter {
+  opacity: 0.01;
+  transform: translateY(-10%);
+}
+
+.bounce-enter.bounce-enter-active {
+  transform: translateY(0%);
+  opacity: 1;
+  transition: opacity 200ms ease-in-out, transform 250ms cubic-bezier(.72,0,.24,1.51);
+
+}
+
+.bounce-leave {
+  opacity: 1;
+  transform: translateY(0%);
+}
+
+.bounce-leave.bounce-leave-active {
+  opacity: 0.01;
+  transition: opacity 200ms ease-in-out, transform 250ms cubic-bezier(.54,-0.38,.39,1);
+  transform: translateY(-10%);
+}
