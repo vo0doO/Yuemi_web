@@ -47,6 +47,9 @@ class DownloadRow extends React.Component {
 		})
 			.then((res) => {
 				console.log(res);
+			})
+			.catch(error => {
+				console.log(error);
 			});
 	}
 

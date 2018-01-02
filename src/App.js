@@ -15,6 +15,9 @@ class App extends React.Component {
 			})
 			.then(json => {
 				this.props.updateFeed(json);
+			})
+			.catch(error => {
+				console.log(error);
 			});
 	}
 

@@ -28,6 +28,12 @@ class Search extends React.Component {
 			.then(json => {
 				this.props.setLoading(false);
 				this.props.updateSearchResults(json.videos);
+			})
+			.catch(error => {
+				console.log(error);
+				this.props.setLoading(false);
+				this.props.updateSearchResults([]);
+				this.props.updateSearchText('');
 			});
 	}
 
