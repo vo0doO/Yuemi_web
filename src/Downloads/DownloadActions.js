@@ -1,6 +1,7 @@
-export const addDownload = (_id, bundle) => {
+export const addDownload = (media_type, _id, bundle) => {
 	return {
 		type: 'ADD_DOWNLOAD',
+		media_type,
 		_id,
 		bundle
 	};

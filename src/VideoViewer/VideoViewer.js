@@ -16,8 +16,12 @@ class VideoViewer extends React.Component {
 		this.props.setVideoViewer(false, {});
 	}
 
-	download() {
-		this.props.addDownload(this.props.video._id, this.props.video);
+	downloadAudio() {
+		this.props.addDownload('AUDIO', this.props.video._id, this.props.video);
+	}
+
+	downloadVideo() {
+		this.props.addDownload('VIDEO', this.props.video._id, this.props.video);
 	}
 
 	render() {
@@ -31,9 +35,14 @@ class VideoViewer extends React.Component {
 							<h3 className='video-viewer-text'>{this.props.video.uploader}</h3>
 							<h3 className='video-viewer-text'>{this.props.video.views}</h3>
 							<h3 className='video-viewer-text'>{this.props.video.duration}</h3>
-							<a onClick={this.download.bind(this)}>
-								<i className='download-button-mp3 fa fa-download'></i>
-							</a>
+							<div className="download-buttons-container">
+								<a onClick={this.downloadAudio.bind(this)}>
+									<i className='download-button-audio fa fa-download'></i>
+								</a>
+								<a onClick={this.downloadVideo.bind(this)}>
+									<i className='download-button-video fa fa-download'></i>
+								</a>
+							</div>
 						</div>
 					</div>
 					<div className='close-viewer' onClick={this.close.bind(this)}>
@@ -57,8 +66,8 @@ const mapDispatchToProps = (dispatch) => {
 		setVideoViewer: (bool, video) => {
 			dispatch(setVideoViewer(bool, video));
 		},
-		addDownload: (id, video) => {
-			dispatch(addDownload(id, video));
+		addDownload: (type, id, video) => {
+			dispatch(addDownload(type, id, video));
 		}
 	};
 };

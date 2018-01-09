@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 class VideoListRow extends React.Component {
 
 	download(video) {
-		this.props.addDownload(video._id, video);
+		this.props.addDownload('AUDIO', video._id, video);
 	}
 
 	pixelate(c, src) { // thumbnail pixelation is an unpopular feature, consider removing
@@ -73,8 +73,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addDownload: (id, bundle) => {
-			dispatch(addDownload(id, bundle));
+		addDownload: (type, id, video) => {
+			dispatch(addDownload(type, id, video));
 		},
 		setVideoViewer: (bool, video) => {
 			dispatch(setVideoViewer(bool, video));

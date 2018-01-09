@@ -5,7 +5,7 @@ const getInitialState = () => {
 		searchResults: [],
 		loading: false,
 		timer: null,
-		downloading: {}, // id -> {id, progress, title, uploader, views, duration, requested}
+		downloading: {}, // id -> {id, progress, title, uploader, views, duration, requested, media_type}
 		downloaded: {}, // same as downloading
 		feed: [],
 		searchText: '',
@@ -42,6 +42,7 @@ const reducer = (state = getInitialState(), action) => {
 	case 'ADD_DOWNLOAD':
 		newState = copyState(state);
 		newState.downloading[action._id] = action.bundle;
+		newState.downloading[action._id].media_type = action.media_type;
 		newState.downloading[action._id].active = false;
 		newState.downloading[action._id].progress = 0;
 		return newState;

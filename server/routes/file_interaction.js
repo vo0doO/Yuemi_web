@@ -4,16 +4,26 @@ var { execFile } = require('child_process');
 
 exports.awaitFileRequest = (socket) => {
 	socket.on('connection', client => {
-		client.on('request_file', id => {
+		client.on('request_file', ({ media_type, id }) => {
 			console.log('INITIATED_FILE_REQUEST: ', id);
-			const p = path.join(__dirname, '..', 'cache', `${id}.mp3`);
+			let p;
+			if(media_type == 'VIDEO') {
+				p = path.join(__dirname, '..', 'cache', `${id}.mp4`);
+			} else {
+				p = path.join(__dirname, '..', 'cache', `${id}.mp3`);
+			}
 			fs.exists(p, exists => {
 				if (exists) {
 					client.emit('request_complete');
 					console.log('FILE_REQUEST_COMPLETE: ', id);
 				} else {
 					console.log('SOCKET DATA:', id);
-					const rp = path.join(__dirname, '..', 'lib', 'request_file');
+					let rp;
+					if(media_type == 'VIDEO') {
+						rp = path.join(__dirname, '..', 'lib', 'request_video.sh');
+					} else {
+						rp = path.join(__dirname, '..', 'lib', 'request_audio.sh');
+					}
 					const requestProcess = execFile(rp, [id]);
 					requestProcess.stdout.on('data', data => {
 						if (data.includes('%')) {
@@ -37,16 +47,28 @@ exports.awaitFileRequest = (socket) => {
 exports.getFile = ({params}, res) => {
 	const re = /^[a-zA-Z0-9_-]+$/;
 	if (re.test(params.id)) {
-		const p = path.join(__dirname, '..', 'cache', `${params.id}.mp3`);
+		let p;
+		if(params.media_type == 'VIDEO') {
+			p = path.join(__dirname, '..', 'cache', `${params.id}.mp4`);
+		} else {
+			p = path.join(__dirname, '..', 'cache', `${params.id}.mp3`);
+		}
 		fs.exists(p, exists => {
 			if (exists) {
 				console.log(`DL_SUCCESS: ${params.id}`);
 				if(params.platform == 'WEB') {
-					let filename = params.title + '.mp3';
-					filename = filename.split('/').join(' ');
+					let filename = params.title;
+					let extension = params.media_type == 'VIDEO' ? '.mp4' : '.mp3';
+					filename += extension;
+					console.log('FILENAME: ' + filename);
+					filename = filename.split('/').join('');
 					res.status(200).download(p, filename);
 				} else {
-					res.status(200).sendFile(`${__dirname}/cache/${params.id}.mp3`);
+					if(params.media_type == 'VIDEO') {
+						res.status(200).sendFile(`${__dirname}/cache/${params.id}.mp4`);
+					} else {
+						res.status(200).sendFile(`${__dirname}/cache/${params.id}.mp3`);
+					}
 				}
 			} else {
 				res.status(400).send('DL_ERROR: FILE_NOT_FOUND');

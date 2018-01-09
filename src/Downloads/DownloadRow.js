@@ -12,7 +12,7 @@ class DownloadRow extends React.Component {
 		const socket = io(url);
 		this.socket = socket;
 		if (!data.active) {
-			socket.emit('request_file', data._id);
+			socket.emit('request_file', { id: data._id, media_type: data.media_type });
 			this.props.setActive(data._id);
 			this.addDownloadToFeed(data);
 		}
@@ -23,7 +23,12 @@ class DownloadRow extends React.Component {
 		socket.on('request_complete', () => {
 			let id = encodeURIComponent(data._id);
 			let title = encodeURIComponent(data.title);
-			let url = `/api/getFile/WEB/${id}/${title}`;
+			let url;
+			if(data.media_type == 'VIDEO') {
+				url = `/api/getFile/WEB/VIDEO/${id}/${title}`;
+			} else {
+				url = `/api/getFile/WEB/AUDIO/${id}/${title}`;
+			}
 			window.location.assign(url);
 			this.props.removeDownload(data._id);
 			socket.close();
