@@ -115,28 +115,12 @@
 
 			a {
 
-				i {
-					margin: 0;
-				}
-
 				&:hover {
 					cursor: pointer;
 				}
 
-				.download-buttons-container {
-					display: flex;
-					flex-direction: row;
-					justify-content: center;
-					align-items: center;
-				}
-
-				.download-button-audio {
-					color: #ff6666;
-				}
-
-				.download-button-video {
-					color: #70ffee;
-					margin-left: 10px;
+				i.download-button-audio {
+					margin-left: 0;
 				}
 			}
 		}

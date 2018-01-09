@@ -16,12 +16,8 @@ class VideoViewer extends React.Component {
 		this.props.setVideoViewer(false, {});
 	}
 
-	downloadAudio() {
-		this.props.addDownload('AUDIO', this.props.video._id, this.props.video);
-	}
-
-	downloadVideo() {
-		this.props.addDownload('VIDEO', this.props.video._id, this.props.video);
+	download(type) {
+		this.props.addDownload(type, this.props.video._id, this.props.video);
 	}
 
 	render() {
@@ -35,11 +31,11 @@ class VideoViewer extends React.Component {
 							<h3 className='video-viewer-text'>{this.props.video.uploader}</h3>
 							<h3 className='video-viewer-text'>{this.props.video.views}</h3>
 							<h3 className='video-viewer-text'>{this.props.video.duration}</h3>
-							<div className="download-buttons-container">
-								<a onClick={this.downloadAudio.bind(this)}>
+							<div className='download-buttons-container'>
+								<a onClick={this.download.bind(this, 'AUDIO')}>
 									<i className='download-button-audio fa fa-download'></i>
 								</a>
-								<a onClick={this.downloadVideo.bind(this)}>
+								<a onClick={this.download.bind(this, 'VIDEO')}>
 									<i className='download-button-video fa fa-download'></i>
 								</a>
 							</div>

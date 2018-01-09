@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 class VideoListRow extends React.Component {
 
-	download(video) {
-		this.props.addDownload('AUDIO', video._id, video);
+	download(video, type) {
+		this.props.addDownload(type, video._id, video);
 	}
 
 	pixelate(c, src) { // thumbnail pixelation is an unpopular feature, consider removing
@@ -55,9 +55,14 @@ class VideoListRow extends React.Component {
 					</div>
 				</div>
 				{!this.hasBeenDownloaded(video._id) && (
-					<a onClick={() => this.download(video)}>
-						<i className='fa fa-download'></i>
-					</a>
+					<div className='download-buttons-container'>
+						<a className='download-button-audio' onClick={() => this.download(video, 'AUDIO')}>
+							<i className='fa fa-download'></i>
+						</a>
+						<a className='download-button-video' onClick={() => this.download(video, 'VIDEO')}>
+							<i className='fa fa-download'></i>
+						</a>
+					</div>
 				)}
 			</li>
 		);
