@@ -19,6 +19,7 @@ you can begin development by running:
 git clone https://github.com/otmichael/Yuemi_web.git
 cd Yuemi_web
 yarn
+mongod
 npm start
 ~~~
 To build for production,
