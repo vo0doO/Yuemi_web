@@ -42,7 +42,9 @@ exports.getFile = ({params}, res) => {
 			if (exists) {
 				console.log(`DL_SUCCESS: ${params.id}`);
 				if(params.platform == 'WEB') {
-					res.status(200).download(p, `${params.title}.mp3`);
+					let filename = params.title + '.mp3';
+					filename = filename.split('/').join(' ');
+					res.status(200).download(p, filename);
 				} else {
 					res.status(200).sendFile(`${__dirname}/cache/${params.id}.mp3`);
 				}
