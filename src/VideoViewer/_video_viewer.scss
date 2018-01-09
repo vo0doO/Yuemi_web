@@ -113,14 +113,9 @@
 				}
 			}
 
-			a {
-
-				&:hover {
-					cursor: pointer;
-				}
-
-				i.download-button-audio {
-					margin-left: 0;
+			.download-buttons-container {
+				.download-button-video {
+					margin-left: 20px;
 				}
 			}
 		}

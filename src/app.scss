@@ -8,10 +8,15 @@
 $font-family: Roboto Slab,
 sans-serif;
 $color_main: #ff6666;
+
 body {
 	margin: 0;
 	background-color: #222;
 	font-family: $font-family;
+}
+
+a:hover {
+	cursor: pointer;
 }
 
 .base-container {
@@ -37,7 +42,6 @@ body {
 
 i.fa {
 	font-size: 27px !important;
-	margin-left: 20px;
 }
 
 .download-buttons-container {
