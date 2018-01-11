@@ -59,3 +59,32 @@ $primary-blue: #6fffef;
 		}
 	}
 }
+
+.download-buttons-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	a {
+		display: inline-block;
+		vertical-align: middle;
+		box-shadow: 0 0 1px transparent;
+
+		transform: perspective(1px) translateZ(0);
+		transition-duration: 0.5s;
+
+		&:hover, &:focus, &:active {
+			transform: scale(1.15);
+			transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+		}
+	}
+
+	.download-button-audio {
+		color: #ff6666;
+	}
+
+	.download-button-video {
+		color: #70ffee;
+	}
+}

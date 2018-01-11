@@ -47,19 +47,3 @@ a:hover {
 i.fa {
 	font-size: 27px !important;
 }
-
-.download-buttons-container {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-
-	.download-button-audio {
-		color: #ff6666;
-	}
-
-	.download-button-video {
-		color: #70ffee;
-	}
-}
-
