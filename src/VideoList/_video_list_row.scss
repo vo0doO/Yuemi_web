@@ -21,14 +21,6 @@ li {
 	flex-direction: row;
 	justify-content: space-between;
 
-	p {
-		display: inline;
-		color: white;
-		&:hover {
-			cursor: pointer;
-		}
-	}
-
 	.left {
 		display: flex;
 		width: 90%;
@@ -45,18 +37,33 @@ li {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
+
+			.title {
+				background-color: #383838;
+				padding: 4px 7px;
+				box-shadow: 0px 1px 3px black;
+				border-radius: 4px;
+				font-size: 16px;
+				color: white;
+				transition: color 200ms ease, transform 200ms ease;
+
+				&:hover {
+					cursor: pointer;
+					color: #ff6565;
+					transform: scale(1.01);
+				}
+			}
+
 			.uploader {
 				font-size: 12px;
 				margin-right: 7px;
 			}
-			.duration {
-				font-size: 14px;
-			}
-			.views {
-				font-size: 14px;
-			}
+
 			p {
+				font-size: 14px;
 				margin: 6px 0;
+				display: inline;
+				color: white;
 			}
 		}
 	}

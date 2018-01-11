@@ -48,7 +48,7 @@ class VideoListRow extends React.Component {
 						<canvas ref={(c) => { this.pixelate(c, src); }} width='100' height='75'></canvas>
 					</div>
 					<div className='left-text'>
-						<p onClick={this.showVideoViewer.bind(this)}>{video.title}</p>
+						<p className='title' onClick={this.showVideoViewer.bind(this)}>{video.title}</p>
 						<p className='uploader'>{video.uploader}</p>
 						<p className='duration'>{video.duration}</p>
 						<p className='views'>{video.views}</p>
