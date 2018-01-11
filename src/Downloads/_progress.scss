@@ -1,39 +1,89 @@
-.CircularProgressbar {
+$primary-red: #ff6666;
+$primary-blue: #6fffef;
+
+.CircularProgressbar.progress-audio {
 	width: 30px;
+
+	.CircularProgressbar-path {
+		stroke: $primary-red;
+		stroke-linecap: round;
+		transition: stroke-dashoffset 0.5s ease 0s;
+	}
+
+	.CircularProgressbar-trail {
+		stroke: #d6d6d6;
+	}
+
+	.CircularProgressbar-text {
+		fill: $primary-red;
+		font-size: 20px;
+		text-anchor: middle;
+	}
+
+	.CircularProgressbar-background {
+		fill: #d6d6d6;
+	}
 }
 
-.CircularProgressbar .CircularProgressbar-path {
-	stroke: #ff6666;
-	stroke-linecap: round;
-	transition: stroke-dashoffset 0.5s ease 0s;
+.CircularProgressbar.CircularProgressbar-inverted.progress-audio {
+
+	.CircularProgressbar-background {
+		fill: $primary-red;
+	}
+
+	.CircularProgressbar-text {
+		fill: #fff;
+	}
+
+	.CircularProgressbar-path {
+		stroke: #fff;
+	}
+
+	.CircularProgressbar-trail {
+		stroke: transparent;
+	}
 }
 
-.CircularProgressbar .CircularProgressbar-trail {
-	stroke: #d6d6d6;
+.CircularProgressbar.progress-video {
+	width: 30px;
+
+	.CircularProgressbar-path {
+		stroke: $primary-blue;
+		stroke-linecap: round;
+		transition: stroke-dashoffset 0.5s ease 0s;
+	}
+
+	.CircularProgressbar-trail {
+		stroke: #d6d6d6;
+	}
+
+	.CircularProgressbar-text {
+		fill: $primary-blue;
+		font-size: 20px;
+		text-anchor: middle;
+	}
+
+	.CircularProgressbar-background {
+		fill: #d6d6d6;
+	}
 }
 
-.CircularProgressbar .CircularProgressbar-text {
-	fill: #ff6666;
-	font-size: 20px;
-	text-anchor: middle;
+.CircularProgressbar.CircularProgressbar-inverted.progress-video {
+
+	.CircularProgressbar-background {
+		fill: $primary-blue;
+	}
+
+	.CircularProgressbar-text {
+		fill: #fff;
+	}
+
+	.CircularProgressbar-path {
+		stroke: #fff;
+	}
+
+	.CircularProgressbar-trail {
+		stroke: transparent;
+	}
 }
 
-.CircularProgressbar .CircularProgressbar-background {
-	fill: #d6d6d6;
-}
-
-.CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-background {
-	fill: #ff6666;
-}
-
-.CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-text {
-	fill: #fff;
-}
-
-.CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-path {
-	stroke: #fff;
-}
-
-.CircularProgressbar.CircularProgressbar-inverted .CircularProgressbar-trail {
-	stroke: transparent;
-}

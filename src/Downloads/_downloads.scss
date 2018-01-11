@@ -1,4 +1,5 @@
-$color_main: #ff6666;
+$primary-red: #ff6666;
+$primary-blue: #6fffef;
 #downloads {
 	position: fixed;
 	bottom: 0;
@@ -40,10 +41,18 @@ $color_main: #ff6666;
 					display: flex;
 					flex-direction: column;
 					justify-content: center;
-					color: $color_main;
 					margin-left: 20px;
+
 					&:hover {
 						cursor: default;
+					}
+
+					&.progress-audio {
+						color: $primary-red;
+					}
+
+					&.progress-video {
+						color: $primary-blue;
 					}
 				}
 			}

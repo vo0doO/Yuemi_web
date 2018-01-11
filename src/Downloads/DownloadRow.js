@@ -77,11 +77,11 @@ class DownloadRow extends React.Component {
 					{this.props.data.title}
 				</p>
 				<div>
-					<a onClick={this.cancelDownload.bind(this)}>
+					<a className={'progress-' + this.props.mediaType} onClick={this.cancelDownload.bind(this)}>
 						<i className='fa fa-times-circle-o'></i>
 					</a>
 					<a>
-						<CircularProgressbar percentage={this.props.data.progress} />
+						<CircularProgressbar percentage={this.props.data.progress} className={'progress-' + this.props.mediaType} />
 					</a>
 				</div>
 			</li>

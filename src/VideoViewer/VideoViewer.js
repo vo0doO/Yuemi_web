@@ -28,7 +28,8 @@ class VideoViewer extends React.Component {
 	getButtonOrProgressBar(video, mediaType) {
 		if(this.inDownloading(video, mediaType)) {
 			return (
-				<CircularProgressbar percentage={this.props.downloading[mediaType][video._id].progress} />
+				<CircularProgressbar percentage={this.props.downloading[mediaType][video._id].progress} className={'progress-' + mediaType} />
+
 			);
 		} else {
 			return (
