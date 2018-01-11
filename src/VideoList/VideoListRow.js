@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 class VideoListRow extends React.Component {
 
-	download(video, type) {
-		this.props.addDownload(type, video._id, video);
+	download(video, mediaType) {
+		this.props.addDownload(mediaType, video._id, video);
 	}
 
 	pixelate(c, src) { // thumbnail pixelation is an unpopular feature, consider removing
@@ -34,8 +34,14 @@ class VideoListRow extends React.Component {
 		this.props.setVideoViewer(true, this.props.video);
 	}
 
+	concatenatePropKeys(propName) {
+		let audioList = Object.keys(this.props[propName].audio);
+		let videoList = Object.keys(this.props[propName].video);
+		return videoList.concat(audioList);
+	}
+
 	hasBeenDownloaded(id) {
-		return Object.keys(this.props.downloaded).indexOf(id) != -1 || Object.keys(this.props.downloading).indexOf(id) != -1;
+		return this.concatenatePropKeys('downloaded').indexOf(id) != -1 || this.concatenatePropKeys('downloading').indexOf(id) != -1;
 	}
 
 	render() {
@@ -56,10 +62,10 @@ class VideoListRow extends React.Component {
 				</div>
 				{!this.hasBeenDownloaded(video._id) && (
 					<div className='download-buttons-container'>
-						<a className='download-button-audio' onClick={() => this.download(video, 'AUDIO')}>
+						<a className='download-button-audio' onClick={() => this.download(video, 'audio')}>
 							<i className='fa fa-download'></i>
 						</a>
-						<a className='download-button-video' onClick={() => this.download(video, 'VIDEO')}>
+						<a className='download-button-video' onClick={() => this.download(video, 'video')}>
 							<i className='fa fa-download'></i>
 						</a>
 					</div>
@@ -78,8 +84,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addDownload: (type, id, video) => {
-			dispatch(addDownload(type, id, video));
+		addDownload: (mediaType, id, video) => {
+			dispatch(addDownload(mediaType, id, video));
 		},
 		setVideoViewer: (bool, video) => {
 			dispatch(setVideoViewer(bool, video));

@@ -4,11 +4,20 @@ import VideoListRow from './VideoListRow.js';
 
 class VideoList extends React.Component {
 
+	getDownloadingLength() {
+		let audioList = Object.keys(this.props.downloading.audio);
+		let videoList = Object.keys(this.props.downloading.video);
+		return audioList.concat(videoList).length;
+	}
+
 	shouldComponentUpdate(nextProps) {
 		if(nextProps.videoList != this.props.videoList) {
 			return true;
 		} else {
-			return nextProps.downloading.length == this.props.downloading.length;
+			let nextPropsAudioList = Object.keys(nextProps.downloading.audio);
+			let nextPropsVideoList = Object.keys(nextProps.downloading.video);
+			let nextPropsDownloadLength = nextPropsAudioList.concat(nextPropsVideoList).length;
+			return nextPropsDownloadLength == this.getDownloadingLength();
 		}
 	}
 
@@ -19,7 +28,7 @@ class VideoList extends React.Component {
 	}
 
 	renderContent() {
-		let dlen = Object.keys(this.props.downloading).length;
+		let dlen = this.getDownloadingLength();
 		if (this.props.loading) {
 			return (
 				<div className='spinner'>

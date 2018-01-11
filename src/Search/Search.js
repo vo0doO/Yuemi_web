@@ -19,7 +19,6 @@ class Search extends React.Component {
 			return;
 		}
 		this.props.updateSearchText(text);
-		console.log(text);
 		let url = '/api/search/' + encodeURIComponent(text);
 		fetch(url)
 			.then(response => {

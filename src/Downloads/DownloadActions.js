@@ -1,30 +1,33 @@
-export const addDownload = (media_type, _id, bundle) => {
+export const addDownload = (mediaType, _id, bundle) => {
 	return {
 		type: 'ADD_DOWNLOAD',
-		media_type,
+		mediaType,
 		_id,
 		bundle
 	};
 };
 
-export const removeDownload = (_id) => {
+export const removeDownload = (mediaType, _id) => {
 	return {
 		type: 'REMOVE_DOWNLOAD',
+		mediaType,
 		_id
 	};
 };
 
-export const setProgress = (_id, progress) => {
+export const setProgress = (mediaType, _id, progress) => {
 	return {
 		type: 'SET_PROGRESS',
+		mediaType,
 		_id,
 		progress
 	};
 };
 
-export const setActive = (_id) => {
+export const setActive = (mediaType, _id) => {
 	return {
 		type: 'SET_ACTIVE',
+		mediaType,
 		_id
 	};
 };

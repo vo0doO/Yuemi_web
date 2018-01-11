@@ -7,41 +7,42 @@ import { setActive, removeDownload, setProgress } from './DownloadActions.js';
 class DownloadRow extends React.Component {
 
 	componentDidMount() {
-		const data = this.props.data;
+		const data = this.props.data; // a video object
+		const mediaType = this.props.mediaType;
 		let url = process.env.NODE_ENV == 'production' ? '/' : 'http://localhost:8081';
 		const socket = io(url);
 		this.socket = socket;
 		if (!data.active) {
-			socket.emit('request_file', { id: data._id, media_type: data.media_type });
-			this.props.setActive(data._id);
+			socket.emit('request_file', { id: data._id, media_type: mediaType.toUpperCase() });
+			this.props.setActive(mediaType, data._id);
 			this.addDownloadToFeed(data);
 		}
 		// no error handling yet
 		socket.on('progress', (progress_string) => {
-			this.props.setProgress(data._id, parseInt(progress_string));
+			this.props.setProgress(mediaType, data._id, parseInt(progress_string));
 		});
 		socket.on('request_complete', () => {
 			let id = encodeURIComponent(data._id);
 			let title = encodeURIComponent(data.title);
 			let url;
-			if(data.media_type == 'VIDEO') {
+			if(mediaType == 'video') {
 				url = `/api/getFile/WEB/VIDEO/${id}/${title}`;
 			} else {
 				url = `/api/getFile/WEB/AUDIO/${id}/${title}`;
 			}
 			window.location.assign(url);
-			this.props.removeDownload(data._id);
+			this.props.removeDownload(mediaType, data._id);
 			socket.close();
 		});
 		socket.on('error', (error) => {
 			console.log(error);
-			this.props.removeDownload(data._id);
+			this.props.removeDownload(mediaType, data._id);
 			socket.close();
 		});
 	}
 
 	cancelDownload() {
-		this.props.removeDownload(this.props.data._id);
+		this.props.removeDownload(this.props.mediaType, this.props.data._id);
 		this.socket.close();
 	}
 
@@ -96,14 +97,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setActive: (id) => {
-			dispatch(setActive(id));
+		setActive: (media_type, id) => {
+			dispatch(setActive(media_type, id));
 		},
-		removeDownload: (id) => {
-			dispatch(removeDownload(id));
+		removeDownload: (media_type, id) => {
+			dispatch(removeDownload(media_type, id));
 		},
-		setProgress: (id, progress) => {
-			dispatch(setProgress(id, progress));
+		setProgress: (media_type, id, progress) => {
+			dispatch(setProgress(media_type, id, progress));
 		}
 	};
 };

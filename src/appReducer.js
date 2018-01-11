@@ -5,8 +5,14 @@ const getInitialState = () => {
 		searchResults: [],
 		loading: false,
 		timer: null,
-		downloading: {}, // id -> {id, progress, title, uploader, views, duration, requested, media_type}
-		downloaded: {}, // same as downloading
+		downloading: {
+			video: {}, // id -> {id, progress, title, uploader, views, duration, requested}
+			audio: {} // same as video
+		},
+		downloaded: {
+			audio: {}, // same as downloading audio
+			video: {} // same as downloading video
+		},
 		feed: [],
 		searchText: '',
 		videoViewerShowing: false,
@@ -15,9 +21,7 @@ const getInitialState = () => {
 };
 
 const copyState = (state) => {
-	return JSON.parse(JSON.stringify(state)); // split reducers and use Object.assign instead of this.
-	// Is not intensive because this app is fairly small
-	// No one's going to add 10,000 downloads.
+	return JSON.parse(JSON.stringify(state)); // split reducers and use Object.assign instead of this
 };
 
 const reducer = (state = getInitialState(), action) => {
@@ -41,26 +45,25 @@ const reducer = (state = getInitialState(), action) => {
 
 	case 'ADD_DOWNLOAD':
 		newState = copyState(state);
-		newState.downloading[action._id] = action.bundle;
-		newState.downloading[action._id].media_type = action.media_type;
-		newState.downloading[action._id].active = false;
-		newState.downloading[action._id].progress = 0;
+		newState.downloading[action.mediaType][action._id] = action.bundle;
+		newState.downloading[action.mediaType][action._id].active = false;
+		newState.downloading[action.mediaType][action._id].progress = 0;
 		return newState;
 
 	case 'REMOVE_DOWNLOAD': // ALSO ADDS TO DOWNLOADED. SHOULD BE TWO ACTIONS?
 		newState = copyState(state);
-		newState.downloaded[action._id] = newState.downloading[action._id];
-		newState.downloading = _.omit(newState.downloading, action._id);
+		newState.downloaded[action.mediaType][action._id] = newState.downloading[action.mediaType][action._id];
+		newState.downloading[action.mediaType] = _.omit(newState.downloading[action.mediaType], action._id);
 		return newState;
 
 	case 'SET_PROGRESS':
 		newState = copyState(state);
-		newState.downloading[action._id].progress = action.progress;
+		newState.downloading[action.mediaType][action._id].progress = action.progress;
 		return newState;
 
 	case 'SET_ACTIVE':
 		newState = copyState(state);
-		newState.downloading[action._id].active = true;
+		newState.downloading[action.mediaType][action._id].active = true;
 		return newState;
 
 	case 'SET_TIMER':

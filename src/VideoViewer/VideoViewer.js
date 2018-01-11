@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import CircularProgressbar from 'react-circular-progressbar';
 import { setVideoViewer } from './VideoViewerActions.js';
 import { addDownload } from '../Downloads/DownloadActions.js';
 
@@ -16,11 +17,35 @@ class VideoViewer extends React.Component {
 		this.props.setVideoViewer(false, {});
 	}
 
-	download(type) {
-		this.props.addDownload(type, this.props.video._id, this.props.video);
+	download(mediaType) {
+		this.props.addDownload(mediaType, this.props.video._id, this.props.video);
+	}
+
+	inDownloading(video, mediaType) {
+		return Object.keys(this.props.downloading[mediaType]).indexOf(video._id) != -1;
+	}
+
+	getButtonOrProgressBar(video, mediaType) {
+		if(this.inDownloading(video, mediaType)) {
+			return (
+				<CircularProgressbar percentage={this.props.downloading[mediaType][video._id].progress} />
+			);
+		} else {
+			return (
+				<a
+					className={'download-button-' + mediaType.toLowerCase()}
+					onClick={this.download.bind(this, mediaType)}
+				>
+					<i className='fa fa-download'></i>
+				</a>
+			);
+		}
 	}
 
 	render() {
+		if(this.props.video._id == undefined) {
+			return <div></div>;
+		}
 		let src = 'https://img.youtube.com/vi/' + this.props.video._id + '/hqdefault.jpg';
 		return (
 			<div className={this.getClasses(['video-viewer'])}>
@@ -32,12 +57,8 @@ class VideoViewer extends React.Component {
 							<h3 className='video-viewer-text'>{this.props.video.views}</h3>
 							<h3 className='video-viewer-text'>{this.props.video.duration}</h3>
 							<div className='download-buttons-container'>
-								<a className='download-button-audio' onClick={this.download.bind(this, 'AUDIO')}>
-									<i className='fa fa-download'></i>
-								</a>
-								<a className='download-button-video' onClick={this.download.bind(this, 'VIDEO')}>
-									<i className='fa fa-download'></i>
-								</a>
+								{this.getButtonOrProgressBar(this.props.video, 'audio')}
+								{this.getButtonOrProgressBar(this.props.video, 'video')}
 							</div>
 						</div>
 					</div>
@@ -53,7 +74,8 @@ class VideoViewer extends React.Component {
 const mapStateToProps = (state) => {
 	return {
 		showing: state.videoViewerShowing,
-		video: state.videoViewerContent
+		video: state.videoViewerContent,
+		downloading: state.downloading
 	};
 };
 
@@ -62,8 +84,8 @@ const mapDispatchToProps = (dispatch) => {
 		setVideoViewer: (bool, video) => {
 			dispatch(setVideoViewer(bool, video));
 		},
-		addDownload: (type, id, video) => {
-			dispatch(addDownload(type, id, video));
+		addDownload: (mediaType, id, video) => {
+			dispatch(addDownload(mediaType, id, video));
 		}
 	};
 };

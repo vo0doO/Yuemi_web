@@ -5,7 +5,7 @@ import appReducer from './appReducer.js';
 import { createLogger } from 'redux-logger';
 
 const logger = createLogger();
-const useLogger = true;
+const useLogger = false;
 let store;
 
 if (useLogger == true) {
