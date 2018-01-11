@@ -32,8 +32,10 @@ class App extends React.Component {
 		} else {
 			return (
 				<div className='feed-container'>
-					<h1 className='header-text-grey'>Recently Downloaded</h1>
-					<VideoList videoList={this.props.feed} />;
+					<div className="feed-wrapper">
+						<h1 className='header-text-grey'>Recently Downloaded</h1>
+						<VideoList videoList={this.props.feed} />;
+					</div>
 				</div>
 			);
 		}
