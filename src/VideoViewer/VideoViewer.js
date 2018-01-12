@@ -5,10 +5,6 @@ import { setVideoViewer } from './VideoViewerActions.js';
 import { addDownload } from '../Downloads/DownloadActions.js';
 import { Transition } from 'react-transition-group';
 
-class AnimatedVideoViewer extends React.Component {
-
-}
-
 class VideoViewer extends React.Component {
 
 	close() {
@@ -65,14 +61,16 @@ class VideoViewer extends React.Component {
 					<div className='video-viewer' style={{...transitionStyles_container[state]}}>
 						<div className='video-viewer-content' style={{...transitionStyles_content[state]}}>
 							<div className='video-viewer-content-top' style={{'backgroundImage': `url(${src})`}}>
-								<div className='video-viewer-text-container'>
-									<h1 className='video-viewer-text'>{this.props.video.title}</h1>
-									<h3 className='video-viewer-text'>{this.props.video.uploader}</h3>
-									<h3 className='video-viewer-text'>{this.props.video.views}</h3>
-									<h3 className='video-viewer-text'>{this.props.video.duration}</h3>
-									<div className='download-buttons-container'>
-										{this.getButtonOrProgressBar(this.props.video, 'audio')}
-										{this.getButtonOrProgressBar(this.props.video, 'video')}
+								<div className='video-viewer-overlay'>
+									<div className='video-viewer-text-container'>
+										<h1 className='video-viewer-text'>{this.props.video.title}</h1>
+										<h3 className='video-viewer-text'>{this.props.video.uploader}</h3>
+										<h3 className='video-viewer-text'>{this.props.video.views}</h3>
+										<h3 className='video-viewer-text'>{this.props.video.duration}</h3>
+										<div className='download-buttons-container'>
+											{this.getButtonOrProgressBar(this.props.video, 'audio')}
+											{this.getButtonOrProgressBar(this.props.video, 'video')}
+										</div>
 									</div>
 								</div>
 							</div>
