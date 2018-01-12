@@ -45,6 +45,9 @@ const reducer = (state = getInitialState(), action) => {
 
 	case 'ADD_DOWNLOAD':
 		newState = copyState(state);
+		// Add content to downloaded
+		newState.downloaded[action.mediaType][action._id] = action.bundle;
+		// Add content to downloading
 		newState.downloading[action.mediaType][action._id] = action.bundle;
 		newState.downloading[action.mediaType][action._id].active = false;
 		newState.downloading[action.mediaType][action._id].progress = 0;
