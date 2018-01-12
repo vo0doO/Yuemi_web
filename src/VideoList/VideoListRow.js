@@ -2,6 +2,7 @@ import React from 'react';
 import { addDownload } from '../Downloads/DownloadActions.js';
 import { setVideoViewer } from '../VideoViewer/VideoViewerActions.js';
 import { connect } from 'react-redux';
+import CircularProgressbar from 'react-circular-progressbar';
 
 class VideoListRow extends React.Component {
 
@@ -50,6 +51,21 @@ class VideoListRow extends React.Component {
 		}
 	}
 
+	getButtonOrProgress(mediaType) {
+		let video = this.props.downloading[mediaType][this.props.video._id];
+		if(!this.hasBeenDownloaded(mediaType) || video == undefined || video.progress != parseInt(video.progress, 10)) {
+			return (
+				<a className={'download-button-' + mediaType} onClick={() => this.download(this.props.video, mediaType)}>
+					<i className='fa fa-download'></i>
+				</a>
+			);
+		} else {
+			return (
+				<CircularProgressbar percentage={video.progress} className={'progress-' + mediaType} />
+			);
+		}
+	}
+
 	render() {
 		const video = this.props.video;
 		let src = 'https://img.youtube.com/vi/' + video._id + '/mqdefault.jpg';
@@ -67,12 +83,8 @@ class VideoListRow extends React.Component {
 					</div>
 				</div>
 				<div className='download-buttons-container'>
-					<a className='download-button-audio' onClick={() => this.download(video, 'audio')}>
-						<i className='fa fa-download'></i>
-					</a>
-					<a className='download-button-video' onClick={() => this.download(video, 'video')}>
-						<i className='fa fa-download'></i>
-					</a>
+					{this.getButtonOrProgress('audio')}
+					{this.getButtonOrProgress('video')}
 				</div>
 			</li>
 		);

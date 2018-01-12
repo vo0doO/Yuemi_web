@@ -127,6 +127,13 @@
 			}
 
 			.download-buttons-container {
+				padding: 8px 15px;
+				flex-direction: row;
+				justify-content: center;
+				background-color: #262626;
+				border-radius: 5px;
+				box-shadow: 0 1px 4px black;
+
 				.download-button-video {
 					margin-left: 20px;
 				}
