@@ -1,6 +1,7 @@
 # Project
 dist/
 node_modules/
+.tern*
 
 server/cache/*
 !server/cache/.gitkeep
