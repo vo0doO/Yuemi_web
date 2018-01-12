@@ -89,12 +89,6 @@ class DownloadRow extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-		downloads: state.downloads,
-	};
-};
-
 const mapDispatchToProps = (dispatch) => {
 	return {
 		setActive: (media_type, id) => {
@@ -109,4 +103,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DownloadRow);
+export default connect(null, mapDispatchToProps)(DownloadRow);
