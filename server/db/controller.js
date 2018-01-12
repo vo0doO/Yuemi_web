@@ -1,16 +1,16 @@
 var mongoose = require('mongoose');
-var Download = require('./schema.js').Download;
+var { VideoDownload, AudioDownload, ActiveVideoDownload, ActiveAudioDownload } = require('./schema.js');
 mongoose.Promise = Promise;
 mongoose.connect('mongodb://localhost/yuemi', { useMongoClient: true });
 
-exports.addDownloadToDatabase = (req, res) => {
-	const body = req.body;
+exports.addDownloadToDatabase = (body, mediaType) => {
 	const _id = body._id;
 	const title = body.title;
 	const duration = body.duration;
 	const uploader = body.uploader;
 	const views = body.views;
-	Download.findOneAndUpdate(
+	let collection = mediaType == 'video' ? VideoDownload : AudioDownload;
+	collection.findOneAndUpdate(
 		{ _id },
 		{
 			_id,
@@ -25,19 +25,33 @@ exports.addDownloadToDatabase = (req, res) => {
 			new: true
 		},
 		err => {
-			if (err) {
-				console.log(`FEED_POST_ERROR: ${err}`);
-				res.status(500).send(err);
-			} else {
-				console.log(`FEED_POST_SUCCESS: ${req.body._id}`);
-				res.sendStatus(200);
+			if(err) {
+				console.log('ERROR UPDATING DB', _id, err);
 			}
 		}
 	);
 };
 
+exports.addActiveDownloadToDatabase = (id, mediaType, onError) => {
+	let ActiveDownloadCollection = mediaType == 'video' ? ActiveVideoDownload : ActiveAudioDownload;
+	ActiveDownloadCollection.create({_id: id}, (err) => {
+		if(err) {
+			onError(err);
+		}
+	});
+};
+
+exports.removeActiveDownloadFromDatabase = (id, mediaType, onError) => {
+	let ActiveDownloadCollection = mediaType == 'video' ? ActiveVideoDownload : ActiveAudioDownload;
+	ActiveDownloadCollection.findById(id).remove((err) => {
+		if(err) {
+			onError(err);
+		}
+	});
+};
+
 exports.getFeed = (req, res) => {
-	Download.find((err, downloads) => {
+	AudioDownload.find((err, downloads) => { // Yuemi's feed does not show videos.
 		if (err) {
 			console.log(`FEED_GET_ERROR: ${err}`);
 			res.status(500).send(err);

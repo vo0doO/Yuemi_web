@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
+
 const downloadSchema = new Schema({
 	_id: {
 		type: String,
@@ -30,4 +31,17 @@ const downloadSchema = new Schema({
 	timestamps: true
 });
 
-exports.Download = mongoose.model('Download', downloadSchema);
+const activeDownloadSchema = new Schema({
+	_id: {
+		type: String,
+		required: true
+	}
+}, {
+	timestamps: true
+});
+
+exports.VideoDownload = mongoose.model('VideoDownload', downloadSchema);
+exports.AudioDownload = mongoose.model('AudioDownload', downloadSchema);
+
+exports.ActiveVideoDownload = mongoose.model('ActiveVideoDownload', activeDownloadSchema);
+exports.ActiveAudioDownload = mongoose.model('ActiveAudioDownload', activeDownloadSchema);

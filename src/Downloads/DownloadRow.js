@@ -7,13 +7,13 @@ import { setActive, removeDownload, setProgress } from './DownloadActions.js';
 class DownloadRow extends React.Component {
 
 	componentDidMount() {
-		const data = this.props.data; // a video object
+		const data = this.props.data; // a video/audio object
 		const mediaType = this.props.mediaType;
 		let url = process.env.NODE_ENV == 'production' ? '/' : 'http://localhost:8081';
 		const socket = io(url);
 		this.socket = socket;
 		if (!data.active) {
-			socket.emit('request_file', { id: data._id, media_type: mediaType.toUpperCase() });
+			socket.emit('request_file', { id: data._id, mediaType, data });
 			this.props.setActive(mediaType, data._id);
 			this.addDownloadToFeed(data);
 		}
@@ -22,13 +22,14 @@ class DownloadRow extends React.Component {
 			this.props.setProgress(mediaType, data._id, parseInt(progress_string));
 		});
 		socket.on('request_complete', () => {
+
+			let url;
 			let id = encodeURIComponent(data._id);
 			let title = encodeURIComponent(data.title);
-			let url;
 			if(mediaType == 'video') {
-				url = `/api/getFile/WEB/VIDEO/${id}/${title}`;
+				url = `/api/getFile/WEB/video/${id}/${title}`;
 			} else {
-				url = `/api/getFile/WEB/AUDIO/${id}/${title}`;
+				url = `/api/getFile/WEB/audio/${id}/${title}`;
 			}
 			window.location.assign(url);
 			this.props.removeDownload(mediaType, data._id);
@@ -91,14 +92,14 @@ class DownloadRow extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setActive: (media_type, id) => {
-			dispatch(setActive(media_type, id));
+		setActive: (mediaType, id) => {
+			dispatch(setActive(mediaType, id));
 		},
-		removeDownload: (media_type, id) => {
-			dispatch(removeDownload(media_type, id));
+		removeDownload: (mediaType, id) => {
+			dispatch(removeDownload(mediaType, id));
 		},
-		setProgress: (media_type, id, progress) => {
-			dispatch(setProgress(media_type, id, progress));
+		setProgress: (mediaType, id, progress) => {
+			dispatch(setProgress(mediaType, id, progress));
 		}
 	};
 };
