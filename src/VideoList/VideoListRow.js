@@ -34,21 +34,27 @@ class VideoListRow extends React.Component {
 		this.props.setVideoViewer(true, this.props.video);
 	}
 
-	concatenatePropKeys(propName) {
-		let audioList = Object.keys(this.props[propName].audio);
-		let videoList = Object.keys(this.props[propName].video);
-		return videoList.concat(audioList);
+	hasBeenDownloaded(mediaType) {
+		return Object.keys(this.props.downloaded[mediaType]).indexOf(this.props.video._id) != -1;
 	}
 
-	hasBeenDownloaded(id) {
-		return this.concatenatePropKeys('downloaded').indexOf(id) != -1 || this.concatenatePropKeys('downloading').indexOf(id) != -1;
+	getRowClassName() {
+		if(this.hasBeenDownloaded('audio') && this.hasBeenDownloaded('video')) {
+			return 'has-downloaded has-downloaded-both';
+		} else if(this.hasBeenDownloaded('audio')) {
+			return 'has-downloaded has-downloaded-audio';
+		} else if(this.hasBeenDownloaded('video')) {
+			return 'has-downloaded has-downloaded-video';
+		} else {
+			return 'not-downloaded';
+		}
 	}
 
 	render() {
 		const video = this.props.video;
 		let src = 'https://img.youtube.com/vi/' + video._id + '/mqdefault.jpg';
 		return (
-			<li className={this.hasBeenDownloaded(video._id) ? 'downloaded' : 'not-downloaded'}>
+			<li className={this.getRowClassName()}>
 				<div className='left'>
 					<div className='left-image'>
 						<canvas ref={(c) => { this.pixelate(c, src); }} width='100' height='75'></canvas>
@@ -60,16 +66,14 @@ class VideoListRow extends React.Component {
 						<p className='views'>{video.views}</p>
 					</div>
 				</div>
-				{!this.hasBeenDownloaded(video._id) && (
-					<div className='download-buttons-container'>
-						<a className='download-button-audio' onClick={() => this.download(video, 'audio')}>
-							<i className='fa fa-download'></i>
-						</a>
-						<a className='download-button-video' onClick={() => this.download(video, 'video')}>
-							<i className='fa fa-download'></i>
-						</a>
-					</div>
-				)}
+				<div className='download-buttons-container'>
+					<a className='download-button-audio' onClick={() => this.download(video, 'audio')}>
+						<i className='fa fa-download'></i>
+					</a>
+					<a className='download-button-video' onClick={() => this.download(video, 'video')}>
+						<i className='fa fa-download'></i>
+					</a>
+				</div>
 			</li>
 		);
 	}

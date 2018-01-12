@@ -1,9 +1,25 @@
-.downloaded {
-	background-color: #d0d0d0;
+$primary-red: #ff6666;
+$primary-blue: #6fffef;
+
+.has-downloaded {
 	border: none;
 	box-shadow: none;
+
 	p {
 		color: black;
+	}
+
+	&.has-downloaded-audio {
+		background-color: $primary-red;
+	}
+
+	&.has-downloaded-video {
+		background-color: $primary-blue;
+	}
+
+	&.has-downloaded-both {
+		background: linear-gradient(to bottom, rgba(111,255,239,1) 49%,rgba(255,102,102,1) 49%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6fffef', endColorstr='#ff6666',GradientType=0 );
 	}
 }
 
@@ -38,25 +54,8 @@ li {
 			flex-direction: column;
 			justify-content: center;
 
-			.title {
-				background-color: #383838;
-				padding: 4px 7px;
-				box-shadow: 0px 1px 3px black;
-				border-radius: 4px;
-				font-size: 16px;
-				color: white;
-				transition: color 200ms ease, transform 200ms ease;
-
-				&:hover {
-					cursor: pointer;
-					color: #ff6565;
-					transform: scale(1.01);
-				}
-			}
-
-			.uploader {
-				font-size: 12px;
-				margin-right: 7px;
+			.title:hover {
+				cursor: pointer;
 			}
 
 			p {
@@ -77,3 +76,19 @@ li {
 		}
 	}
 }
+
+	.not-downloaded .title {
+		background-color: #383838;
+		padding: 4px 7px;
+		box-shadow: 0px 1px 3px black;
+		border-radius: 4px;
+		font-size: 16px;
+		color: white;
+		transition: color 200ms ease, transform 200ms ease;
+
+		&:hover {
+			cursor: pointer;
+			color: #ff6565;
+			transform: scale(1.01);
+		}
+	}
