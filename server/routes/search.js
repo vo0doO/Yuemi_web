@@ -4,10 +4,8 @@ var cheerio = require('cheerio');
 module.exports = ({params}, res) => {
 	const idIndicator = '?v=';
 	const idIndex = params.query.indexOf(idIndicator);
-	if (idIndex != -1) {
-		var newQuery = params.query.slice(idIndex + idIndicator.length);
-	}
-	const url = `http://www.youtube.com/results?search_query=${encodeURIComponent(newQuery || params.query)}`;
+	var query = idIndex != -1 ? params.query.slice(idIndex + idIndicator.length).split('&')[0] : params.query;
+	const url = `http://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
 	const videos = [];
 	request(url, (err, {statusCode}, body) => {
 		if (err) {
