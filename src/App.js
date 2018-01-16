@@ -6,23 +6,11 @@ import VideoList from './VideoList/VideoList.js';
 import VideoViewer from './VideoViewer/VideoViewer.js';
 import Downloads from './Downloads/Downloads.js';
 import { updateFeed } from './AppActions.js';
+import { getFeed } from './lib/feed.js';
 
 class App extends React.Component {
 
-	componentWillMount() {
-		fetch('/api/downloads')
-			.then(response => {
-				return response.json();
-			})
-			.then(json => {
-				this.props.updateFeed(json);
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	}
-
-	getVideoList() {
+	_getVideoList() {
 		if(this.props.searchResults.length < 1 && this.props.searchText.length > 0 && !this.props.loading) {
 			return (
 				<h1 className='header-text-grey'>No Videos Found</h1>
@@ -41,11 +29,15 @@ class App extends React.Component {
 		}
 	}
 
+	componentWillMount() {
+		getFeed(this.props.updateFeed);
+	}
+
 	render() {
 		return (
 			<div className='base-container'>
 				<Search />
-				{this.getVideoList()}
+				{this._getVideoList()}
 				<Downloads />
 				<VideoViewer />
 			</div>

@@ -2,9 +2,10 @@ import _ from 'lodash';
 
 const getInitialState = () => {
 	return {
-		searchResults: [],
-		loading: false,
-		timer: null,
+		searchResults: [], // [id]
+		feed: [], // [id]
+		loading: false, // bool, searchResults loading or not
+		timer: null, // setTimeout object
 		downloading: {
 			video: {}, // id -> {id, progress, title, uploader, views, duration, requested}
 			audio: {} // same as video
@@ -13,8 +14,7 @@ const getInitialState = () => {
 			audio: {}, // same as downloading audio
 			video: {} // same as downloading video
 		},
-		feed: [],
-		searchText: '',
+		searchText: '', // value of search bar
 		videoViewerShowing: false,
 		videoViewerContent: {}
 	};

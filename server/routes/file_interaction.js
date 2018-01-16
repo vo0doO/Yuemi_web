@@ -49,6 +49,7 @@ exports.awaitFileRequest = (socket) => {
 				.then((bool) => {
 					if(bool) {
 						console.log('FILE_REQUEST_COMPLETE_ALREADY_DOWNLOADED: ', id);
+						addDownloadToDatabase(data, mediaType);
 						client.emit('request_complete');
 					} else {
 						addActiveDownloadToDatabase(id, mediaType, (err) => {

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import CircularProgressbar from 'react-circular-progressbar';
 import io from 'socket.io-client';
 import { setActive, removeDownload, setProgress } from './DownloadActions.js';
+import { getFeed } from '../lib/feed.js';
+import { updateFeed } from '../AppActions.js';
 
 class DownloadRow extends React.Component {
 
@@ -22,17 +24,12 @@ class DownloadRow extends React.Component {
 			this.props.setProgress(mediaType, data._id, parseInt(progress_string));
 		});
 		socket.on('request_complete', () => {
-
-			let url;
 			let id = encodeURIComponent(data._id);
 			let title = encodeURIComponent(data.title);
-			if(mediaType == 'video') {
-				url = `/api/getFile/WEB/video/${id}/${title}`;
-			} else {
-				url = `/api/getFile/WEB/audio/${id}/${title}`;
-			}
+			let url = `/api/getFile/WEB/${mediaType}/${id}/${title}`;
 			window.location.assign(url);
 			this.props.removeDownload(mediaType, data._id);
+			getFeed(this.props.updateFeed);
 			socket.close();
 		});
 		socket.on('error', (error) => {
@@ -100,6 +97,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		setProgress: (mediaType, id, progress) => {
 			dispatch(setProgress(mediaType, id, progress));
+		},
+		updateFeed: (json) => {
+			dispatch(updateFeed(json));
 		}
 	};
 };
