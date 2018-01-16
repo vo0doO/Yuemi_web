@@ -3,6 +3,7 @@ var fs = require('fs');
 var { execFile } = require('child_process');
 var { ActiveVideoDownload, ActiveAudioDownload, VideoDownload, AudioDownload } = require('../db/schema');
 var { addDownloadToDatabase, addActiveDownloadToDatabase, removeActiveDownloadFromDatabase } = require('../db/controller.js');
+var axios = require('axios');
 
 const _inActiveDownloads = (id, type) => {
 	let collection = type == 'video' ? ActiveVideoDownload : ActiveAudioDownload;
@@ -114,3 +115,55 @@ exports.getFile = ({params}, res) => {
 		res.status(400).send(`ILLEGAL_STRING: ${params.id}`);
 	}
 };
+
+exports.awaitPlaylistRequest = (socket) => {
+	// if playlist doesnt exist send back error and make an alert
+	socket.on('connection', client => {
+		client.on('request_playlist', ({ id }) => {
+			let rp = path.join(__dirname, '..', 'lib', 'request_playlist.sh'),
+				p,
+				filename = '',
+				videoCount = 0,
+				curVideo = 0,
+				receivedCount = 0;
+			client.on('file_received', () => {
+				receivedCount += 1;
+				if(receivedCount == videoCount) {
+					client.emit('request_complete');
+				}
+			});
+			const requestProcess = execFile(rp, [id]);
+			requestProcess.stdout.on('data', data => {
+				if(data.includes('mp3') && data.includes('Destination')) {
+					// timing is bad, thumbnail still processing at this point
+					filename = path.basename(data.trim().split(' ')[2], '.mp3');
+					p = path.join(__dirname, '..', 'cache', filename + '.mp3');
+					fs.readFile(p, (err, file) => {
+						console.log('EMMITING FILE:', p);
+						client.emit('file_ready', file, filename);
+					});
+				} else if(data.includes('Downloading video') && data.includes(' of ')) {
+					videoCount = parseInt(data.trim().split(' ')[5].trim());
+					curVideo = parseInt(data.trim().split(' ')[3].trim());
+					client.emit('cur_info', videoCount, curVideo, filename);
+				} else if(data.includes('%')) {
+					client.emit('progress', data.trim().split(/\s+/)[1]);
+				}
+			});
+			requestProcess.on('close', (exitCode) => {
+				if(exitCode == 0) {
+					console.log('FILE_REQUEST_COMPLETE: ', id);
+				} else {
+					console.log('REQUEST_PROCESS_EXITED_WITH_ERROR');
+					client.emit('request_error');
+				}
+			});
+			requestProcess.on('error', err => {
+				console.log('FILE_REQUEST_ERROR: ', id, err);
+				client.emit('error', err);
+			});
+		});
+	});
+};
+
+
