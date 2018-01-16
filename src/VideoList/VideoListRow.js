@@ -31,6 +31,16 @@ class VideoListRow extends React.Component {
 		return c;
 	}
 
+	_getDownloadCount() {
+		if(this.props.video.downloads) {
+			return (
+				<div className='download-count'>
+					<p>{this.props.video.downloads}</p>
+				</div>
+			);
+		}
+	}
+
 	showVideoViewer() {
 		this.props.setVideoViewer(true, this.props.video);
 	}
@@ -85,6 +95,7 @@ class VideoListRow extends React.Component {
 				<div className='download-buttons-container'>
 					{this.getButtonOrProgress('audio')}
 					{this.getButtonOrProgress('video')}
+					{this._getDownloadCount()}
 				</div>
 			</li>
 		);
