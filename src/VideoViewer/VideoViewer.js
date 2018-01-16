@@ -50,8 +50,8 @@ class VideoViewer extends React.Component {
 			exiting: { transform: 'rotateX(-90deg)' },
 			exited: { transform: 'rotateX(-90deg)' }
 		};
-		let src = 'https://img.youtube.com/vi/' + this.props.video._id + '/hqdefault.jpg';
 		let shouldShow = this.props.video._id != undefined && this.props.showing;
+		let src = shouldShow ? 'https://img.youtube.com/vi/' + this.props.video._id + '/hqdefault.jpg' : '#';
 		return (
 			<Transition
 				in={shouldShow}
