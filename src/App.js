@@ -5,6 +5,7 @@ import Search from './Search/Search.js';
 import VideoList from './VideoList/VideoList.js';
 import VideoViewer from './VideoViewer/VideoViewer.js';
 import Downloads from './Downloads/Downloads.js';
+import Advanced from './Advanced/Advanced.js';
 import { updateFeed } from './AppActions.js';
 import { getFeed } from './lib/feed.js';
 
@@ -39,6 +40,7 @@ class App extends React.Component {
 		return (
 			<div className='base-container'>
 				<Search />
+				<Advanced />
 				{this._getVideoList()}
 				<Downloads />
 				<VideoViewer />
