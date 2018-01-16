@@ -51,7 +51,8 @@ class VideoViewer extends React.Component {
 			exited: { transform: 'rotateX(-90deg)' }
 		};
 		let shouldShow = this.props.video._id != undefined && this.props.showing;
-		let src = shouldShow ? 'https://img.youtube.com/vi/' + this.props.video._id + '/hqdefault.jpg' : '#';
+		let thumbnail_src = shouldShow ? 'https://img.youtube.com/vi/' + this.props.video._id + '/hqdefault.jpg' : '#';
+		let video_src = 'https://www.youtube.com/watch?v=' + this.props.video._id;
 		return (
 			<Transition
 				in={shouldShow}
@@ -60,10 +61,11 @@ class VideoViewer extends React.Component {
 				{(state) => (
 					<div className='video-viewer' style={{...transitionStyles_container[state]}}>
 						<div className='video-viewer-content' style={{...transitionStyles_content[state]}}>
-							<div className='video-viewer-content-top' style={{'backgroundImage': `url(${src})`}}>
+							<div className='video-viewer-content-top' style={{'backgroundImage': `url(${thumbnail_src})`}}>
 								<div className='video-viewer-overlay'>
 									<div className='video-viewer-text-container'>
 										<h1 className='video-viewer-text'>{this.props.video.title}</h1>
+										<a className='video-viewer-text' href={video_src}>{this.props.video._id}</a>
 										<h3 className='video-viewer-text'>{this.props.video.uploader}</h3>
 										<h3 className='video-viewer-text'>{this.props.video.views}</h3>
 										<h3 className='video-viewer-text'>{this.props.video.duration}</h3>
