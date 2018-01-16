@@ -75,7 +75,7 @@ class DownloadRow extends React.Component {
 					{this.props.data.title}
 				</p>
 				<div>
-					<a className={'progress-' + this.props.mediaType} onClick={this.cancelDownload.bind(this)}>
+					<a className={'cancel progress-' + this.props.mediaType} onClick={this.cancelDownload.bind(this)}>
 						<i className='fa fa-times-circle-o'></i>
 					</a>
 					<a>
