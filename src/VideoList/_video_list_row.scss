@@ -35,11 +35,16 @@ li {
 	flex-direction: row;
 	justify-content: space-between;
 
+	@media (max-width: 700px) {
+		padding: 20px;
+	}
+
 	.left {
 		display: flex;
 		width: 90%;
 		flex-direction: row;
 		justify-content: left;
+
 		.left-image {
 			margin-right: 20px;
 			align-self: center;
@@ -47,13 +52,16 @@ li {
 				cursor: pointer;
 			}
 		}
+
 		canvas {
 			box-shadow: 1px 1px 3px black;
 		}
+
 		.left-text {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
+			margin-right: 20px;
 
 			.title:hover {
 				cursor: pointer;
@@ -64,6 +72,8 @@ li {
 				margin: 6px 0;
 				display: inline;
 				color: white;
+				word-wrap: break-word;
+				word-break: break-word;
 			}
 		}
 	}
