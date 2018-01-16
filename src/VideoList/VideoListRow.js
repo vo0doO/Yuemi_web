@@ -72,7 +72,7 @@ class VideoListRow extends React.Component {
 		return (
 			<li className={this.getRowClassName()}>
 				<div className='left'>
-					<div className='left-image'>
+					<div className='left-image' onClick={this.showVideoViewer.bind(this)}>
 						<canvas ref={(c) => { this.pixelate(c, src); }} width='100' height='75'></canvas>
 					</div>
 					<div className='left-text'>
