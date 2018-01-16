@@ -25,4 +25,5 @@ app.get('/api/downloads', controller.getFeed);
 app.get('/api/search/:query', search);
 app.get('/api/getFile/:platform/:mediaType/:id/:title', file_interaction.getFile);
 file_interaction.awaitFileRequest(socket);
+file_interaction.awaitPlaylistRequest(socket);
 app.get('*', (req, res) => res.sendStatus(404));

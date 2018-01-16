@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import io from 'socket.io-client';
+import FileSaver from 'file-saver';
 
 class Advanced extends React.Component {
 
@@ -18,8 +20,36 @@ class Advanced extends React.Component {
 		e.preventDefault();
 		let text = this.refs.searchBar.value;
 		if(text && text != '') {
-			this.props.download
+			// abort because id is invalid, do error logging
+			console.log('ready to socket');
+		} else {
+			console.log('aborting');
+			return;
 		}
+		let id = text.trim();
+		let url = process.env.NODE_ENV == 'production' ? '/' : 'http://localhost:8081';
+		let blob;
+		const socket = io(url);
+		this.socket = socket;
+		socket.emit('request_playlist', {id});
+		socket.on('progress', (progress_string) => {
+			console.log(progress_string);
+		});
+		socket.on('file_ready', (file, filename) => {
+			// will need to save file
+			console.log(file);
+			blob = new Blob([new Uint8Array(file)]);
+			FileSaver.saveAs(blob, filename);
+		});
+		socket.on('request_complete', () => {
+			socket.close();
+		});
+		socket.on('error', (error) => {
+			console.log(error);
+			socket.close();
+		});
+
+
 	}
 
 	renderOptionsIfShowing() {

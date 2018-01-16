@@ -41,6 +41,7 @@
 		"concurrently": "^3.5.1",
 		"css-loader": "^0.28.7",
 		"express": "^4.16.2",
+		"file-saver": "^1.3.3",
 		"html-webpack-plugin": "^2.30.1",
 		"inline-source-map": "^0.6.2",
 		"lodash": "^4.17.4",

@@ -114,3 +114,39 @@ exports.getFile = ({params}, res) => {
 		res.status(400).send(`ILLEGAL_STRING: ${params.id}`);
 	}
 };
+
+exports.awaitPlaylistRequest = (socket) => {
+	socket.on('connection', client => {
+		client.on('request_playlist', ({ id, data }) => {
+			let rp = path.join(__dirname, '..', 'lib', 'request_playlist.sh');
+			let p;
+			let filename = '';
+			const requestProcess = execFile(rp, [id]);
+			requestProcess.stdout.on('data', data => {
+				if(data.includes('mp3') && data.includes('Destination')) {
+					filename = data.trim().split(' ')[2];
+					console.log(filename);
+				} else if(data.includes('Downloading video') && data.includes(' of ') && !data.includes('1 of ')) {
+					p = path.join(__dirname, '..', 'cache', filename);
+					fs.readFile(p, (err, file) => {
+						client.emit('file_ready', file, filename); // this, or send ready with filename then download file client side
+					});
+				} else if(data.includes('%')) {
+					client.emit('progress', data.trim().split(/\s+/)[1]);
+				}
+			});
+			requestProcess.on('close', () => {
+				removeActiveDownloadFromDatabase(id, (err) => {
+					console.log('DB_REMOVAL_ERROR: ' + id, err);
+				});
+				addDownloadToDatabase(data);
+				console.log('FILE_REQUEST_COMPLETE: ', id);
+				client.emit('request_complete');
+			});
+			requestProcess.on('error', err => {
+				console.log('FILE_REQUEST_ERROR: ', id, err);
+				client.emit('error', err);
+			});
+		});
+	});
+};
