@@ -23,7 +23,9 @@ class VideoList extends React.Component {
 
 	renderVideoList() {
 		return this.props.videoList.map((video) => {
-			return <VideoListRow video={video} key={video._id} />;
+			return (
+				<VideoListRow video={video} key={video._id} />
+			);
 		});
 	}
 

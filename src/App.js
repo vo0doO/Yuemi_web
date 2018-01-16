@@ -16,13 +16,15 @@ class App extends React.Component {
 				<h1 className='header-text-grey'>No Videos Found</h1>
 			);
 		} else if(this.props.searchResults.length > 0 || this.props.loading) {
-			return <VideoList videoList={this.props.searchResults} />;
+			return (
+				<VideoList videoList={this.props.searchResults} />
+			);
 		} else {
 			return (
 				<div className='feed-container'>
 					<div className="feed-wrapper">
 						<h1 className='header-text-grey'>Recently Downloaded</h1>
-						<VideoList videoList={this.props.feed} />;
+						<VideoList videoList={this.props.feed} />
 					</div>
 				</div>
 			);
