@@ -53,6 +53,7 @@ exports.awaitFileRequest = (socket) => {
 						client.emit('request_complete');
 					} else {
 						addActiveDownloadToDatabase(id, mediaType, (err) => {
+							// Seems like youtube-dl takes care of this itself..
 							console.log('ERROR_CREATING_DB_ENTRY_DOWNLOAD_LIKELY_ALREADY_ACTIVE' + id + '\n' + err);
 							console.log('ABORTING');
 							client.emit('disconnect');
