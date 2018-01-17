@@ -3,6 +3,7 @@ var fs = require('fs');
 var { execFile } = require('child_process');
 var { ActiveVideoDownload, ActiveAudioDownload, VideoDownload, AudioDownload } = require('../db/schema');
 var { addDownloadToDatabase, addActiveDownloadToDatabase, removeActiveDownloadFromDatabase } = require('../db/controller.js');
+var axios = require('axios');
 
 const _inActiveDownloads = (id, type) => {
 	let collection = type == 'video' ? ActiveVideoDownload : ActiveAudioDownload;
@@ -116,11 +117,13 @@ exports.getFile = ({params}, res) => {
 };
 
 exports.awaitPlaylistRequest = (socket) => {
+	// if playlist doesnt exist send back error and make an alert
 	socket.on('connection', client => {
 		client.on('request_playlist', ({ id, data }) => {
 			let rp = path.join(__dirname, '..', 'lib', 'request_playlist.sh');
-			let p;
+			let p, title;
 			let filename = '';
+			let ti = '&title=';
 			const requestProcess = execFile(rp, [id]);
 			requestProcess.stdout.on('data', data => {
 				if(data.includes('mp3') && data.includes('Destination')) {
@@ -129,7 +132,12 @@ exports.awaitPlaylistRequest = (socket) => {
 				} else if(data.includes('Downloading video') && data.includes(' of ') && !data.includes('1 of ')) {
 					p = path.join(__dirname, '..', 'cache', filename);
 					fs.readFile(p, (err, file) => {
-						client.emit('file_ready', file, filename); // this, or send ready with filename then download file client side
+						axios.get('http://youtube.com/get_video_info?video_id=' + path.basename(filename, '.mp3'))
+							.then((body) => {
+								title = body.data.slice(body.data.indexOf(ti) + ti.length).split('&')[0];
+								client.emit('file_ready', file, decodeURIComponent(title.replace(/\+/g, '%20')) + '.mp3');
+								// this, or send ready with filename then download file client side
+							});
 					});
 				} else if(data.includes('%')) {
 					client.emit('progress', data.trim().split(/\s+/)[1]);
@@ -144,6 +152,7 @@ exports.awaitPlaylistRequest = (socket) => {
 				client.emit('request_complete');
 			});
 			requestProcess.on('error', err => {
+				// if playlist doesnt exist send back error and make an alert
 				console.log('FILE_REQUEST_ERROR: ', id, err);
 				client.emit('error', err);
 			});
