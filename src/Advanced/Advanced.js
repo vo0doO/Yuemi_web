@@ -43,7 +43,7 @@ class Advanced extends React.Component {
 					return res.text();
 				})
 				.then((title) => {
-					resolve(title);
+					resolve(decodeURIComponent(title.replace(/\+/g, '%20')));
 				});
 		});
 	}
