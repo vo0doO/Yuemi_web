@@ -119,43 +119,53 @@ exports.getFile = ({params}, res) => {
 exports.awaitPlaylistRequest = (socket) => {
 	// if playlist doesnt exist send back error and make an alert
 	socket.on('connection', client => {
-		client.on('request_playlist', ({ id, data }) => {
-			let rp = path.join(__dirname, '..', 'lib', 'request_playlist.sh');
-			let p, title;
-			let filename = '';
-			let ti = '&title=';
+		client.on('request_playlist', ({ id }) => {
+			let rp = path.join(__dirname, '..', 'lib', 'request_playlist.sh'),
+				p,
+				filename = '',
+				videoCount = 0,
+				curVideo = 0,
+				receivedCount = 0;
+			client.on('file_received', () => {
+				receivedCount += 1;
+				if(receivedCount == videoCount) {
+					client.emit('request_complete');
+				}
+			});
 			const requestProcess = execFile(rp, [id]);
 			requestProcess.stdout.on('data', data => {
-				if(data.includes('mp3') && data.includes('Destination')) {
-					filename = data.trim().split(' ')[2];
-					console.log(filename);
-				} else if(data.includes('Downloading video') && data.includes(' of ') && !data.includes('1 of ')) {
-					p = path.join(__dirname, '..', 'cache', filename);
+				if(data.includes('Downloading webpage')) {
+					client.emit('video_id', data.split(' ')[1].slice(0, -1))
+				} else if(data.includes('mp3') && data.includes('Destination')) {
+					// timing is bad, thumbnail still processing at this point
+					filename = path.basename(data.trim().split(' ')[2], '.mp3');
+					p = path.join(__dirname, '..', 'cache', filename + '.mp3');
 					fs.readFile(p, (err, file) => {
-						axios.get('http://youtube.com/get_video_info?video_id=' + path.basename(filename, '.mp3'))
-							.then((body) => {
-								title = body.data.slice(body.data.indexOf(ti) + ti.length).split('&')[0];
-								client.emit('file_ready', file, decodeURIComponent(title.replace(/\+/g, '%20')) + '.mp3');
-								// this, or send ready with filename then download file client side
-							});
+						console.log('EMMITING FILE:', p);
+						client.emit('file_ready', file, filename);
 					});
+				} else if(data.includes('Downloading video') && data.includes(' of ')) {
+					videoCount = parseInt(data.trim().split(' ')[5].trim());
+					curVideo = parseInt(data.trim().split(' ')[3].trim());
+					client.emit('cur_info', videoCount, curVideo, filename);
 				} else if(data.includes('%')) {
 					client.emit('progress', data.trim().split(/\s+/)[1]);
 				}
 			});
-			requestProcess.on('close', () => {
-				removeActiveDownloadFromDatabase(id, (err) => {
-					console.log('DB_REMOVAL_ERROR: ' + id, err);
-				});
-				addDownloadToDatabase(data);
-				console.log('FILE_REQUEST_COMPLETE: ', id);
-				client.emit('request_complete');
+			requestProcess.on('close', (exitCode) => {
+				if(exitCode == 0) {
+					console.log('FILE_REQUEST_COMPLETE: ', id);
+				} else {
+					console.log('REQUEST_PROCESS_EXITED_WITH_ERROR');
+					client.emit('request_error');
+				}
 			});
 			requestProcess.on('error', err => {
-				// if playlist doesnt exist send back error and make an alert
 				console.log('FILE_REQUEST_ERROR: ', id, err);
 				client.emit('error', err);
 			});
 		});
 	});
 };
+
+

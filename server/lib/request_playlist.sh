@@ -14,6 +14,6 @@ CUR_DIR=${PWD##*/}
 
 if [ $CUR_DIR == "cache" ]; then
 	rm $(ls -tc *.mp3 | tail -n +30)
-	youtube-dl --newline -f 43 -x --audio-format mp3 --embed-thumbnail -o "%(id)s.%(ext)s" -- $1
+	youtube-dl --newline -f 43 -i -x --audio-format mp3 --embed-thumbnail -o "%(id)s.%(ext)s" -- $1
 fi
 

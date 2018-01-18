@@ -10,7 +10,8 @@ var path = require('path');
 var bodyParser = require('body-parser');
 
 var search = require('./routes/search');
-var file_interaction = require('./routes/file_interaction');
+var file_interaction = require('./routes/file_interaction.js');
+var video_data = require('./routes/video_data.js');
 var controller = require('./db/controller.js'); // database operations
 
 app.use(({headers, connection}, res, next) => {
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use('/', express.static(path.join(__dirname, '..', 'dist')));
 
 app.get('/api/downloads', controller.getFeed);
+app.get('/api/getVideoTitle/:id', video_data.getVideoTitle);
 app.get('/api/search/:query', search);
 app.get('/api/getFile/:platform/:mediaType/:id/:title', file_interaction.getFile);
 file_interaction.awaitFileRequest(socket);
