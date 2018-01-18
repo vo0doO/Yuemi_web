@@ -57,10 +57,8 @@ class Advanced extends React.Component {
 		let text = this.refs.playlistInput.value;
 		if(text && text != '') {
 			// abort because id is invalid, do error logging
-			console.log('ready to socket');
 			this.setModalOpen(true);
 		} else {
-			console.log('aborting');
 			return;
 		}
 		let id = text.trim(),
@@ -73,16 +71,14 @@ class Advanced extends React.Component {
 			this.setProgress(parseInt(progress_string));
 		});
 		socket.on('cur_info', (videoCount, curVideo, filename) => {
-			console.log(videoCount, curVideo, filename);
 			this.setCurInfo(videoCount, curVideo, filename);
 		});
 		socket.on('file_ready', (file, id) => {
 			this.getVideoTitle(id)
 				.then((title) => {
-					console.log(title);
+					this.setProgress(0);
 					blob = new Blob([new Uint8Array(file)]);
 					FileSaver.saveAs(blob, title + '.mp3');
-					console.log('emmitting file received');
 					socket.emit('file_received');
 				});
 		});
@@ -90,6 +86,8 @@ class Advanced extends React.Component {
 			this.setModalOpen(false);
 			this.refs.playlistInput.value = '';
 			this.setShowing(false);
+			this.setCurInfo(0, 0);
+			this.setProgress(0);
 			socket.close();
 		});
 		socket.on('request_error', (error) => {
