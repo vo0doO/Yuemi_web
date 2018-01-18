@@ -1,3 +1,12 @@
+#advanced {
+	width: 700px;
+	max-width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
 .advanced-button {
 	margin: 0;
 	background-color: #262626;
@@ -16,9 +25,71 @@
 }
 
 .advanced-options-container {
+	width: 100%;
+	margin-top: 20px;
+	box-shadow: 0px 0px 10px black;
+	padding: 0;
+	width: 100%;
+	border: 1px solid #383838;
+	background-color: #262626;
 
-	p {
-		color: white;
+	.advanced-options-wrapper {
+		padding: 15px 40px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+			
+		p {
+			display: inline;
+			margin-right: 20px;
+			color: white;
+		}
+
+		.advanced-options-inner-container {
+			width: 100%;
+			margin: 10px;
+
+			input {
+				text-align: center;
+				height: 30px;
+				padding: 0;
+				border-radius: 0;
+				line-height: 70px;
+				background-color: transparent;
+				color: white;
+				font-size: 20px;
+				border: none;
+				outline: none;
+				box-shadow: 0 0 1px black;
+				margin-right: 20px;
+				transform: perspective(1px) translateZ(0);
+				transition-duration: 0.5s;
+
+				&:hover {
+					transform: scale(1.05);
+					transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+				}
+			}
+
+			a {
+				display: inline-block;
+				vertical-align: middle;
+				box-shadow: 0 0 1px transparent;
+
+				transform: perspective(1px) translateZ(0);
+				transition-duration: 0.5s;
+
+				&:hover, &:focus, &:active {
+					transform: scale(1.15);
+					transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+				}
+
+				i {
+					color: #ff6666;
+				}
+			}
+		}
 	}
 }
 
@@ -42,10 +113,37 @@
 		height: 75px;
 		background-color: #222;
 		box-shadow: 0 0 20px black;
+		border-radius: 4px;
 
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
 		align-items: center;
+
+		.advanced-modal-left {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+			flex: 8;
+
+			p {
+				margin: 0;
+				color: white;
+			}
+		}
+
+		.advanced-modal-right {
+			flex: 2;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			.progress-audio {
+				margin: 0;
+			}
+		}
 	}
 }

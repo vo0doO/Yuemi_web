@@ -3,6 +3,7 @@ $primary-blue: #6fffef;
 
 .CircularProgressbar {
 	width: 27px;
+	min-width: 27px;
 	margin: 10px;
 
 	&.progress-audio {

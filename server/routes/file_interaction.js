@@ -134,9 +134,7 @@ exports.awaitPlaylistRequest = (socket) => {
 			});
 			const requestProcess = execFile(rp, [id]);
 			requestProcess.stdout.on('data', data => {
-				if(data.includes('Downloading webpage')) {
-					client.emit('video_id', data.split(' ')[1].slice(0, -1))
-				} else if(data.includes('mp3') && data.includes('Destination')) {
+				if(data.includes('mp3') && data.includes('Destination')) {
 					// timing is bad, thumbnail still processing at this point
 					filename = path.basename(data.trim().split(' ')[2], '.mp3');
 					p = path.join(__dirname, '..', 'cache', filename + '.mp3');

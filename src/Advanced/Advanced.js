@@ -13,9 +13,7 @@ class Advanced extends React.Component {
 			modalOpen: false,
 			progress: 0,
 			videoCount: 0,
-			curVideo: 0,
-			id: '',
-			title: 'untitled'
+			curVideo: 0
 		};
 	}
 
@@ -38,12 +36,6 @@ class Advanced extends React.Component {
 		});
 	}
 
-	setVideoTitle(title) {
-		this.setState({
-			title
-		});
-	}
-
 	getVideoTitle(id) {
 		return new Promise((resolve) => { // no reject
 			fetch('/api/getVideoTitle/' + id)
@@ -56,14 +48,17 @@ class Advanced extends React.Component {
 		});
 	}
 
-	submitPlaylist(e) {
-		e.preventDefault();
-		let text = this.refs.searchBar.value;
+	downloadFile() {
+		console.log('WIP');
+		return;
+	}
+
+	downloadPlaylist() {
+		let text = this.refs.playlistInput.value;
 		if(text && text != '') {
 			// abort because id is invalid, do error logging
 			console.log('ready to socket');
 			this.setModalOpen(true);
-			return; // delete this
 		} else {
 			console.log('aborting');
 			return;
@@ -74,13 +69,6 @@ class Advanced extends React.Component {
 		const socket = io(url);
 		this.socket = socket;
 		socket.emit('request_playlist', {id});
-		socket.on('video_id', (id) => {
-			this.getVideoTitle(id)
-				.then((title) => {
-					console.log('SETTING VIDEO TITLE');
-					this.setVideoTitle(title);
-				});
-		});
 		socket.on('progress', (progress_string) => {
 			this.setProgress(parseInt(progress_string));
 		});
@@ -100,6 +88,8 @@ class Advanced extends React.Component {
 		});
 		socket.on('request_complete', () => {
 			this.setModalOpen(false);
+			this.refs.playlistInput.value = '';
+			this.setShowing(false);
 			socket.close();
 		});
 		socket.on('request_error', (error) => {
@@ -114,9 +104,12 @@ class Advanced extends React.Component {
 			return (
 				<div className='advanced-modal-container'>
 					<div className='advanced-modal-wrapper'>
-						<p>Video {this.state.curVideo} of {this.state.videoCount}</p>
-						<p>{this.state.title}</p>
-						<CircularProgressbar percentage={this.state.progress} className='progress-audio' />
+						<div className='advanced-modal-left'>
+							<p>Video {this.state.curVideo} of {this.state.videoCount}</p>
+						</div>
+						<div className='advanced-modal-right'>
+							<CircularProgressbar percentage={this.state.progress} className='progress-audio' />
+						</div>
 					</div>
 				</div>
 			);
@@ -127,19 +120,30 @@ class Advanced extends React.Component {
 		if(this.state.showing) {
 			return (
 				<div className='advanced-options-container'>
-					<div>
-						<p>Download Public Playlist:</p>
-						<form onSubmit={this.submitPlaylist.bind(this)}>
+					<div className='advanced-options-wrapper'>
+						<div className='advanced-options-inner-container'>
+							<p>Download Public Playlist</p>
 							<input
-								placeholder={'Input public playlist id'}
-								ref={'searchBar'}
+								placeholder={'Playlist ID'}
+								ref={'playlistInput'}
 								spellCheck={false}
-								onSubmit={this.submitPlaylist.bind(this)}
 							/>
-							<button type='submit'>Download</button>
-						</form>
+							<a className='download-button-audio'>
+								<i className='fa fa-download ' onClick={this.downloadPlaylist.bind(this)}></i>
+							</a>
+						</div>
+						<div className='advanced-options-inner-container'>
+							<p>Download From File</p>
+							<input
+								placeholder={'File Contents'}
+								ref={'fileInput'}
+								spellCheck={false}
+							/>
+							<a className='download-button-audio'>
+								<i className='fa fa-download ' onClick={this.downloadFile.bind(this)}></i>
+							</a>
+						</div>
 					</div>
-					<p>Download From File:</p>
 				</div>
 			);
 		}
