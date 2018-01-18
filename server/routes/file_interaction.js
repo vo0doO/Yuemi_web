@@ -136,13 +136,28 @@ exports.awaitPlaylistRequest = (socket) => {
 			requestProcess.stdout.on('data', data => {
 				if(data.includes('mp3') && data.includes('thumbnail')) {
 					// timing is bad, thumbnail still processing at this point
-					filename = path.basename(data.trim().split(' ')[4].slice(1, -1), '.mp3');
-					console.log(filename);
-					p = path.join(__dirname, '..', 'cache', filename + '.mp3');
-					fs.readFile(p, (err, file) => {
-						console.log('EMMITING FILE:', p);
-						client.emit('file_ready', file, filename);
-					});
+					let lines = data.split('\n'),
+						line,
+						trimmedLine,
+						splitLine,
+						filenameWithQuotes,
+						filenameWithExtension;
+					for(let i = 0; i < lines.length; i++) {
+						line = lines[i];
+						if(line.includes('mp3') && line.includes('thumbnail')) {
+							trimmedLine = line.trim();
+							splitLine = trimmedLine.split(' ');
+							filenameWithQuotes = splitLine[4];
+							filenameWithExtension = filenameWithQuotes.slice(1, -1);
+							filename = path.basename(filenameWithExtension, '.mp3');
+							console.log(line, trimmedLine, splitLine, filenameWithQuotes, filenameWithExtension, filename);
+							p = path.join(__dirname, '..', 'cache', filename + '.mp3');
+							fs.readFile(p, (err, file) => {
+								console.log('EMMITING FILE:', p);
+								client.emit('file_ready', file, filename);
+							});
+						}
+					}
 				} else if(data.includes('Downloading video') && data.includes(' of ')) {
 					videoCount = parseInt(data.trim().split(' ')[5].trim());
 					curVideo = parseInt(data.trim().split(' ')[3].trim());
