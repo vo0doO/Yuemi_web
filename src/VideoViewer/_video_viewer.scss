@@ -141,6 +141,21 @@
 					margin-left: 20px;
 				}
 			}
+
+			.video-viewer-link-container {
+				
+				a {
+
+					&.video-viewer-text {
+						margin-right: 10px;
+					}
+
+					i {
+						font-size: 15px !important;
+						color: #ff6666;
+					}
+				}
+			}
 		}
 	}
 }

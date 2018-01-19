@@ -4,6 +4,7 @@ import CircularProgressbar from 'react-circular-progressbar';
 import { setVideoViewer } from './VideoViewerActions.js';
 import { addDownload } from '../Downloads/DownloadActions.js';
 import { Transition } from 'react-transition-group';
+import copy from 'copy-to-clipboard';
 
 class VideoViewer extends React.Component {
 
@@ -13,6 +14,10 @@ class VideoViewer extends React.Component {
 
 	download(mediaType) {
 		this.props.addDownload(mediaType, this.props.video._id, this.props.video);
+	}
+
+	copyLinkToClipboard(src) {
+		copy(src);
 	}
 
 	inDownloading(video, mediaType) {
@@ -65,7 +70,12 @@ class VideoViewer extends React.Component {
 								<div className='video-viewer-overlay'>
 									<div className='video-viewer-text-container'>
 										<h1 className='video-viewer-text'>{this.props.video.title}</h1>
-										<a className='video-viewer-text' href={video_src}>{this.props.video._id}</a>
+										<div className='video-viewer-link-container'>
+											<a className='video-viewer-text' href={video_src}>{this.props.video._id}</a>
+											<a className='copy-text-button' onClick={this.copyLinkToClipboard.bind(this, video_src)}>
+												<i className="fa fa-clipboard" aria-hidden="true"></i>
+											</a>
+										</div>
 										<h3 className='video-viewer-text'>{this.props.video.uploader}</h3>
 										<h3 className='video-viewer-text'>{this.props.video.views}</h3>
 										<h3 className='video-viewer-text'>{this.props.video.duration}</h3>
