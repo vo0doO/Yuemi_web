@@ -5,8 +5,16 @@ import { setVideoViewer } from './VideoViewerActions.js';
 import { addDownload } from '../Downloads/DownloadActions.js';
 import { Transition } from 'react-transition-group';
 import copy from 'copy-to-clipboard';
+import TooltipText from '../Tooltip/Tooltip.js';
 
 class VideoViewer extends React.Component {
+
+	constructor() {
+		super();
+		this.state = {
+			tooltipVisible: false
+		};
+	}
 
 	close() {
 		this.props.setVideoViewer(false, this.props.video);
@@ -17,6 +25,8 @@ class VideoViewer extends React.Component {
 	}
 
 	copyLinkToClipboard(src) {
+		this.setState({tooltipVisible: true});
+		setTimeout(() => this.setState({tooltipVisible: false}), 1000);
 		copy(src);
 	}
 
@@ -72,8 +82,9 @@ class VideoViewer extends React.Component {
 										<h1 className='video-viewer-text'>{this.props.video.title}</h1>
 										<div className='video-viewer-link-container'>
 											<a className='video-viewer-text' href={video_src}>{this.props.video._id}</a>
-											<a className='copy-text-button' onClick={this.copyLinkToClipboard.bind(this, video_src)}>
-												<i className="fa fa-clipboard" aria-hidden="true"></i>
+											<a className='copy-text-button tooltip' onClick={this.copyLinkToClipboard.bind(this, video_src)}>
+												<i className='fa fa-clipboard' aria-hidden='true'></i>
+												<TooltipText visible={this.state.tooltipVisible} text={'Link Copied!'}/>
 											</a>
 										</div>
 										<h3 className='video-viewer-text'>{this.props.video.uploader}</h3>
@@ -87,7 +98,7 @@ class VideoViewer extends React.Component {
 								</div>
 							</div>
 							<div className='close-viewer' onClick={this.close.bind(this)}>
-								<i className="fa fa-times"></i>
+								<i className='fa fa-times'></i>
 							</div>
 						</div>
 					</div>
