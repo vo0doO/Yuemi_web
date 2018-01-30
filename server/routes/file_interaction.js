@@ -3,7 +3,6 @@ var fs = require('fs');
 var { execFile } = require('child_process');
 var { ActiveVideoDownload, ActiveAudioDownload, VideoDownload, AudioDownload } = require('../db/schema');
 var { addDownloadToDatabase, addActiveDownloadToDatabase, removeActiveDownloadFromDatabase } = require('../db/controller.js');
-var axios = require('axios');
 
 const _inActiveDownloads = (id, type) => {
 	let collection = type == 'video' ? ActiveVideoDownload : ActiveAudioDownload;
@@ -40,6 +39,28 @@ async function _isDownloaded(id, p, type) {
 	return isInDownloaded && !isInActiveDownloads && exists;
 }
 
+const doFileRequest = (mediaType, id, client, data) => {
+	let rp = path.join(__dirname, '..', 'lib', 'request_' + mediaType + '.sh');
+	const requestProcess = execFile(rp, [id]);
+	requestProcess.stdout.on('data', data => {
+		if (data.includes('%')) {
+			client.emit('progress', data.trim().split(/\s+/)[1]);
+		}
+	});
+	requestProcess.on('close', () => {
+		removeActiveDownloadFromDatabase(id, mediaType, (err) => {
+			console.log('DB_REMOVAL_ERROR: ' + id, err);
+		});
+		addDownloadToDatabase(data, mediaType);
+		console.log('FILE_REQUEST_COMPLETE: ', id);
+		client.emit('request_complete');
+	});
+	requestProcess.on('error', err => {
+		console.log('FILE_REQUEST_ERROR: ', id, err);
+		client.emit('error', err);
+	});
+};
+
 exports.awaitFileRequest = (socket) => {
 	socket.on('connection', client => {
 		client.on('request_file', ({ mediaType, id, data }) => {
@@ -59,29 +80,28 @@ exports.awaitFileRequest = (socket) => {
 							console.log('ABORTING');
 							client.emit('disconnect');
 						});
-						let rp = path.join(__dirname, '..', 'lib', 'request_' + mediaType + '.sh');
-						const requestProcess = execFile(rp, [id]);
-						requestProcess.stdout.on('data', data => {
-							if (data.includes('%')) {
-								client.emit('progress', data.trim().split(/\s+/)[1]);
-							}
-						});
-						requestProcess.on('close', () => {
-							removeActiveDownloadFromDatabase(id, mediaType, (err) => {
-								console.log('DB_REMOVAL_ERROR: ' + id, err);
-							});
-							addDownloadToDatabase(data, mediaType);
-							console.log('FILE_REQUEST_COMPLETE: ', id);
-							client.emit('request_complete');
-						});
-						requestProcess.on('error', err => {
-							console.log('FILE_REQUEST_ERROR: ', id, err);
-							client.emit('error', err);
-						});
+						doFileRequest(mediaType, id, client, data);
 					}
 				});
 		});
 	});
+};
+
+const sendDownload = (params, res, p) => {
+	if(params.platform == 'WEB') {
+		let filename = params.title;
+		let extension = params.mediaType == 'video' ? '.mp4' : '.mp3';
+		filename += extension;
+		console.log('FILENAME: ' + filename);
+		filename = filename.split('/').join('');
+		res.status(200).download(p, filename);
+	} else {
+		if(params.mediaType == 'video') {
+			res.status(200).sendFile(`${__dirname}/cache/${params.id}.mp4`);
+		} else {
+			res.status(200).sendFile(`${__dirname}/cache/${params.id}.mp3`);
+		}
+	}
 };
 
 exports.getFile = ({params}, res) => {
@@ -92,20 +112,7 @@ exports.getFile = ({params}, res) => {
 		fs.exists(p, exists => {
 			if (exists) {
 				console.log(`DL_SUCCESS: ${params.id}`);
-				if(params.platform == 'WEB') {
-					let filename = params.title;
-					let extension = params.mediaType == 'video' ? '.mp4' : '.mp3';
-					filename += extension;
-					console.log('FILENAME: ' + filename);
-					filename = filename.split('/').join('');
-					res.status(200).download(p, filename);
-				} else {
-					if(params.mediaType == 'video') {
-						res.status(200).sendFile(`${__dirname}/cache/${params.id}.mp4`);
-					} else {
-						res.status(200).sendFile(`${__dirname}/cache/${params.id}.mp3`);
-					}
-				}
+				sendDownload(params, res, p);
 			} else {
 				res.status(400).send('DL_ERROR: FILE_NOT_FOUND');
 			}
